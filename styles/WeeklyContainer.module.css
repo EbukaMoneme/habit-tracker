@@ -1,0 +1,19 @@
+.container {
+	margin-top: 2em;
+}
+
+.labelcontainer {
+	display: flex;
+	align-items: center;
+	margin-left: 15%;
+	width: 80%;
+	justify-content: space-between;
+}
+
+.label {
+	width: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: rgb(155, 155, 155);
+}

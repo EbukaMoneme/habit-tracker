@@ -14,3 +14,28 @@ a {
 * {
   box-sizing: border-box;
 }
+
+input[type="checkbox"] {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.checkbox {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  background: rgb(213, 213, 213);
+  /* border: 2px #ddd solid; */
+	border-radius: 3px;
+  margin-right: 4px;
+	transition: all 150ms;
+}
+
+.hidden {
+	background: rgb(255, 255, 255);
+}

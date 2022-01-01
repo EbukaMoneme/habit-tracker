@@ -1,0 +1,21 @@
+.habit {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 1em 0;
+}
+
+.title {
+	width: 15%;
+	font-size: 1.15em;
+	/* margin-right: 2em; */
+}
+
+.checklist {
+	display: flex;
+	width: 80%;
+	/* padding: 0 1em; */
+	
+	justify-content: space-between;
+	/* width: 100vw; */
+}
