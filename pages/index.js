@@ -62,7 +62,7 @@ export default function Home() {
 							It's {' '}
 							<span>
 								<Clock 
-									format={'h:mm:ssa'}
+									format={'h:mma'}
 									ticking={true}	
 								/>
 							</span>
