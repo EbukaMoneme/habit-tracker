@@ -30,7 +30,10 @@ input[type="text"] {
 }
 
 label {
-	margin-bottom: 0.5em;
+	/* margin-bottom: 0.5em;
+	margin-top: 0.5em; */
+	margin: 0;
+	padding: 0;
 }
 
 .checkbox {
@@ -40,13 +43,15 @@ label {
   background: rgb(213, 213, 213);
   /* border: 2px #ddd solid; */
 	border-radius: 3px;
-  margin-right: 4px;
+  /* margin-right: 4px; */
 	transition: all 150ms;
 	cursor: pointer;
+	
 }
 
 .hidden {
 	background: rgb(255, 255, 255);
+	cursor: auto;
 }
 
 button {

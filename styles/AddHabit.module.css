@@ -19,6 +19,8 @@
 
 .title {
   font-size: 4rem;
+	margin: 0.5em 0;
+	
 }
 
 .title span{
@@ -39,6 +41,12 @@
 .inputDiv > label{ 
 	font-size: 1.25em;
 	font-weight: bold;
+	margin-bottom: 0.5em;
+}
+
+.textArea {
+	resize: none;
+	height: 6em;
 }
 .submit {
 	width: 100%;
@@ -50,6 +58,13 @@
 	margin-top: 1em;
 	/* font-size: 1.2em; */
 	font-weight: bold;
+}
+
+.submit:hover {
+	background-color: white;
+	border: 1px solid #0070f3;
+	color: #0070f3;
+	transition: all 150ms;
 }
 
 .titleDiv {
@@ -122,4 +137,28 @@
 
 .backDiv:hover {
 	color: #0070f3;
+}
+
+
+/* Footer CSS */
+
+.footer {
+  display: flex;
+  flex: 1;
+  padding: 2rem 0;
+  border-top: 1px solid #eaeaea;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.logo {
+	width: 1em;
+	height: 1em;
 }

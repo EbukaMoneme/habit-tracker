@@ -17,7 +17,7 @@
 .habitfooter {
 	display: flex;
 	justify-content: space-between;
-	padding: 0.5em 0;
+	padding: 0.4em 0;
 	
 }
 
@@ -29,5 +29,22 @@
 	border-radius: 6px;
 	width: 95%;
 	align-self: center;
-	margin: 0;
+}
+.completebutton:hover {
+
+	border: 1px solid #0070f3;
+	transition: all 150ms;
+}
+
+.undo {
+	border: 1px solid transparent;
+	border-radius: 7px;
+	padding: 0.1em 0.5em;
+	/* font-weight: bold; */
+	transition: all 150ms;
+}
+.undo:hover {
+	border: 1px solid white;
+	/* font-weight: bold; */
+	transition: all 150ms;
 }

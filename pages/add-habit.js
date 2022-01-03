@@ -79,7 +79,8 @@ export default function AddHabit() {
 					</div>
 					<div className={styles.inputDiv}>
 						<label htmlFor="description">Describe this habit</label>
-						<textarea 
+						<textarea
+							className={styles.textArea}
 							id="description" 
 							name="description" 
 							value={state.description}
@@ -178,6 +179,18 @@ export default function AddHabit() {
 				  <button className={styles.submit} type="submit">Create Habit</button>
 				</form>
 			</main>
+
+			<footer className={styles.footer}>
+        <a
+          href="https://www.flexibly.ai/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Powered by {' '}
+          <img className={styles.logo} src="/images/logo.svg" />  {' '}
+					Flexibly
+        </a>
+      </footer>
 		</div>
 	)
 }

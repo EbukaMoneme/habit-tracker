@@ -29,7 +29,7 @@ export default function DailyHabit(props) {
 						<FontAwesomeIcon icon={faCheck}></FontAwesomeIcon> {' '}
 						Completed
 					</div>
-					<button onClick={() => setIsCompleted(!isCompleted)}>Undo</button>
+					<button className={styles.undo} onClick={() => setIsCompleted(!isCompleted)}>Undo</button>
 				</div>
 			}
 		</div>
