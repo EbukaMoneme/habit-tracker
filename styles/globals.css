@@ -25,6 +25,14 @@ input[type="checkbox"] {
   width: 1px;
 }
 
+input[type="text"] {
+  height: 2em;
+}
+
+label {
+	margin-bottom: 0.5em;
+}
+
 .checkbox {
   display: inline-block;
   height: 30px;
@@ -34,8 +42,28 @@ input[type="checkbox"] {
 	border-radius: 3px;
   margin-right: 4px;
 	transition: all 150ms;
+	cursor: pointer;
 }
 
 .hidden {
 	background: rgb(255, 255, 255);
+}
+
+button {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+::-webkit-scrollbar {
+	width: 0;  /* Remove scrollbar space */
+	background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+textarea {
+	max-width: 100%;
 }

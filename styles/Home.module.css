@@ -5,7 +5,7 @@
 .main {
   min-height: 100vh;
   display: flex;
-	justify-content: space-between;
+	justify-content: space-evenly;
   /* flex-direction: column; */
 }
 
@@ -21,12 +21,6 @@
 
 .title span, .description span {
   color: #0070f3;
-}
-
-.title a:hover,
-.title a:focus,
-.title a:active {
-  text-decoration: underline;
 }
 
 .title {
@@ -46,11 +40,11 @@
 /* weekly view */
 
 .weeklyview {
-	width: 60%;
+	width: 65%;
 }
 
 .viewheader {
-	margin: 2em 0;
+	margin: 2em 0 1.5em 0;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -58,7 +52,7 @@
 }
 
 .addhabit {
-	padding: 0.5em 1em;
+	padding: 0.75em 1.25em;
 	border: 1px solid #dadada;
 	border-radius: 50px;
 	margin-left: 2em;
@@ -66,8 +60,8 @@
 }
 
 /* daily view */
-.dailylyview {
-	/* width: 50%; */
+.dailyview {
+	width: 25%;
 }
 
 .grid {

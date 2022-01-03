@@ -1,0 +1,33 @@
+.habit {
+	padding: 1em;
+	width: 100%;
+	/* height: 6em; */
+	display: flex;
+	flex-direction: column;
+	border-radius: 7px;
+	margin-top: 1.5em;
+	transition: all 150ms;
+}
+
+.title {
+	font-size: 1.3em;
+	margin-bottom: 0.5em;
+}
+
+.habitfooter {
+	display: flex;
+	justify-content: space-between;
+	padding: 0.5em 0;
+	
+}
+
+.completebutton {
+	color: #0070f3;
+	font-weight: bold;
+	padding: 0.5em 1em;
+	border: 1px solid #dadada;
+	border-radius: 6px;
+	width: 95%;
+	align-self: center;
+	margin: 0;
+}

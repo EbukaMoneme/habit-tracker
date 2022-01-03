@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import WeeklyContainer from '../components/WeeklyContainer'
 
 import styles from '../styles/Home.module.css'
@@ -40,6 +41,30 @@ export default function Home() {
 			description: 'Reflect',
 			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
 			color: 'orange'
+		},
+		{
+			title: 'Meditate',
+			description: 'Focus',
+			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+			color: 'pink'
+		},
+		{
+			title: 'Meditate',
+			description: 'Focus',
+			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+			color: 'pink'
+		},
+		{
+			title: 'Journal',
+			description: 'Reflect',
+			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+			color: 'orange'
+		},
+		{
+			title: 'Meditate',
+			description: 'Focus',
+			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+			color: 'pink'
 		}
 	]
 
@@ -72,7 +97,11 @@ export default function Home() {
 					</div>
 					<div className={styles.viewheader}>
 						<div className={styles.description}>Your habits for the week:</div>
-						<div className={styles.addhabit}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon> Add Habit</div>
+						<Link href="/add-habit">
+							<a className={styles.addhabit}>
+								<FontAwesomeIcon icon={faPlus}></FontAwesomeIcon> Add Habit
+							</a>
+						</Link>
 
 					</div>
 					<hr/>

@@ -1,0 +1,125 @@
+.container {
+  padding: 0 4rem;
+}
+
+
+.main {
+  min-height: 100vh;
+  display: flex;
+	justify-content: center;
+}
+
+.form {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	/* justify-content: space-between; */
+	
+}
+
+.title {
+  font-size: 4rem;
+}
+
+.title span{
+  color: #0070f3;
+}
+
+.firstInput {
+	display: flex;
+	justify-content: space-between;
+}
+
+.inputDiv {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 2em;
+}
+
+.inputDiv > label{ 
+	font-size: 1.25em;
+	font-weight: bold;
+}
+.submit {
+	width: 100%;
+	border-radius: 7px;
+	background-color: #0070f3;
+	color: white;
+	padding: 1em;
+	border: none;
+	margin-top: 1em;
+	/* font-size: 1.2em; */
+	font-weight: bold;
+}
+
+.titleDiv {
+	width: 90%;
+}
+.colorDiv {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.colorInput {
+	width: 2.75em;
+	height: 2.75em;
+	
+}
+
+.textInput {
+	padding: 1.25em;
+}
+
+.frequencyButtons {
+	display: flex;
+	justify-content: space-between;
+	border: 1px solid #dadada;
+	border-radius: 7px;
+	padding: 0.5em;
+}
+
+.selected {
+	padding: 1em 1.5em;
+	background-color: #0070f3;
+	color: white;
+	border-radius: 7px;
+	font-weight: bold;
+	transition: all 150ms;
+}
+.unselected {
+	padding: 1em 1.5em;
+	background-color: white;
+	color: black;
+	font-weight: bold;
+	transition: all 150ms;
+}
+
+.backDiv {
+	display: flex;
+	color: rgb(96, 96, 96);
+	align-items: center;
+	margin-top: 1em;
+}
+
+.back {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+	background-color: rgb(237, 237, 237);
+	/* font-size: 1.5em; */
+	width: 2em;
+	padding: 0.5em;
+	border-radius: 7px;
+	margin-right: 0.5em;
+}
+
+.backText {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.backDiv:hover {
+	color: #0070f3;
+}
