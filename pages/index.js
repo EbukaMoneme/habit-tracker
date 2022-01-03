@@ -151,7 +151,8 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           Powered by {' '}
-          <img className={styles.logo} src="/images/logo.svg" />
+          <img className={styles.logo} src="/images/logo.svg" />  {' '}
+					Flexibly
         </a>
       </footer>
     </div>
