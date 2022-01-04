@@ -25,17 +25,6 @@ model Habit {
   description String
   frequency   String[]
   color       String
-  Week        Week[]
+	status			Json
 }
 
-model Week {
-  habit     Habit    @relation(fields: [habitId], references: [id])
-  habitId   Int      @unique
-  monday    Boolean?
-  tuesday   Boolean?
-  wednesday Boolean?
-  thursday  Boolean?
-  friday    Boolean?
-  saturday  Boolean?
-  sunday    Boolean?
-}

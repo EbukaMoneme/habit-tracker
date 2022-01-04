@@ -4,31 +4,47 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
 export default function WeeklyHabit(props) {
-	const formatChecklist = (frequency) => {
+	const formatChecklist = (status) => {
 		const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 		
 		const inputs = []
 		for (let day of week) {
-			if (frequency.includes(day)) {
+			if (status[day] === true) {
 				// inputs.push(<input style={{backgroundColor: props.color}} className="check" type="checkbox" id={day} name={day} value={day}/>)
 				inputs.push(<Checkbox
 					type="checkbox" 
-					id={day} 
+					id={props.id} 
 					name={day} 
 					value={day}
 					color={props.color}
+					default={true}
 					disabled={false}
+					status={props.status}
 				/>)
 			}
-			if (!frequency.includes(day)) {
+			if (status[day] === false) {
+				// inputs.push(<input style={{backgroundColor: props.color}} className="check" type="checkbox" id={day} name={day} value={day}/>)
+				inputs.push(<Checkbox
+					type="checkbox" 
+					id={props.id} 
+					name={day} 
+					value={day}
+					color={props.color}
+					default={false}
+					disabled={false}
+					status={props.status}
+				/>)
+			}
+			if (status[day] === '') {
 				// inputs.push(<input style={{backgroundColor: props.color}} className="check" type="checkbox" id={day} name={day} value={day} disabled/>)
 				inputs.push(<Checkbox
 					type="checkbox" 
-					id={day} 
+					id={props.id} 
 					name={day} 
 					value={day}
 					color={props.color}
 					disabled={true}
+					status={props.status}
 				/>)
 			}
 		}
@@ -44,7 +60,7 @@ export default function WeeklyHabit(props) {
 			  <FontAwesomeIcon style={{color: props.color}} icon={faCircle}></FontAwesomeIcon> {props.title}
 			</div>
 			<form className={styles.checklist}>
-				{formatChecklist(props.frequency)}
+				{formatChecklist(props.status)}
 			</form>
 		</div>
 	)

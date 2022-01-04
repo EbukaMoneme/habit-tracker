@@ -1,17 +1,50 @@
 import Head from 'next/head'
 import { useState } from 'react'
+import Router from 'next/router';
 import styles from '../styles/AddHabit.module.css'
+import axios from 'axios';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Link from 'next/link';
+import { useQuery, useMutation, queryCache, useQueryClient } from "react-query";
+import useCreateHabitRequest from '../hooks/useCreateHabitRequest';
+// const createHabitRequest = (habit) => {
+	
+// }
+
+// async function createHabitRequest(habitData) {
+// 	const response = await fetch("/api/habits/create", {
+// 		method: "POST",
+// 		headers: {
+// 			"Content-Type": "application/json"
+// 		},
+// 		body: JSON.stringify({habitData})
+// 	})
+// 	const data = await response.json();
+// 	const { habit } = data;
+// 	return data;
+// }
+
+// function useCreateHabit() {
+// 	return useMutation(createHabitRequest);
+// }
 
 export default function AddHabit() {
 	const [state, setState] = useState({
     title: "",
-    color: "",
+    color: "#000000",
     description: "",
-    frequency: []
+    frequency: [],
+		status: {
+			'Monday': '', 
+			'Tuesday': '', 
+			'Wednesday': '', 
+			'Thursday': '', 
+			'Friday': '', 
+			'Saturday': '', 
+			'Sunday': ''
+		}
   })
 
 	const selected = (val) => {
@@ -24,13 +57,84 @@ export default function AddHabit() {
 
 	const changeFrequency = (val) => {
 		const newFrequency = [...state.frequency]
+		const week = {...state.status}
 		if (selected(val)) {
 			newFrequency = newFrequency.filter(day => day !== val)
+			week[val] = '';
 		} else {
 			newFrequency.push(val)
+			week[val] = false;
 		}
-		setState({...state, frequency: newFrequency })
+
+		// const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+		
+		// for (let day of state.frequency) {
+		// 	if (state.frequency.includes(day)) {
+		// 		week[day] = false;
+		// 	} else {
+		// 		week[day] = '';
+		// 	}
+		// }
+
+
+		setState({...state, frequency: newFrequency, status: week })
 	}
+
+	// const completedStatus = () => {
+	// 	// const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+	// 	// const week = {}
+	// 	// for (let day of days) {
+	// 	// 	if (state.frequency.includes(day)) {
+	// 	// 		week[day] = false;
+	// 	// 	} else {
+	// 	// 		week[day] = null;
+	// 	// 	}
+	// 	// }
+	// 	return week;
+	// }
+	// const status = completedStatus();
+
+	const newHabit = {
+		title: state.title,
+		color: state.color,
+		description: state.description,
+		frequency: state.frequency,
+		status: state.status
+	}
+	
+	// const createHabit = useCreateHabit();
+
+	// const handleSubmit = () => {
+	// 	const newHabit = {
+	// 		title: state.title,
+  //   	color: state.color,
+  //   	description: state.description,
+  //   	frequency: state.frequency
+	// 	}
+	// 	useCreateHabitRequest(newHabit);
+	// 	// const queryClient = useQueryClient();
+
+		
+	async function addHabit(habit) {
+		const response = await fetch('/api/habits/create', {
+			method: 'POST',
+			body: JSON.stringify(habit)
+		})
+
+		if (!response.ok) {
+			throw new Error(response.statusText)
+		}
+
+		return await response.json();
+	}
+		
+	// 	// createHabit.mutate({
+	// 	// 	title: state.title,
+  //   // 	color: state.color,
+  //   // 	description: state.description,
+  //   // 	frequency: state.frequency
+	// 	// })
+	// }
 
 	return (
 		<div className={styles.container}>
@@ -41,7 +145,21 @@ export default function AddHabit() {
       </Head>
 
 			<main className={styles.main}>
-				<form className={styles.form} >
+				<form 
+					className={styles.form}
+					onSubmit={async (event) => {
+						event.preventDefault()
+						try {
+							await addHabit(newHabit)
+						} catch (err) {
+							console.log(err)
+						} finally {
+							Router.push('/')
+
+						}
+						// handleSubmit()
+					}}
+				>
 					<Link href="/">
 						<a className={styles.backDiv}>
 							<div className={styles.back}>

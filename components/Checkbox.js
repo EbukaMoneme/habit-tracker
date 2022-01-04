@@ -1,14 +1,33 @@
 import { useState } from "react";
 
 function Checkbox(props) {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(props.default === true? true : false);
+
+	async function updateStatus(id, day, status) {
+		const newStatus = {id, day, status}
+		const response = await fetch('/api/habits/update', {
+			method: 'PUT',
+			body: JSON.stringify(newStatus)
+		})
+
+		if (!response.ok) {
+			throw new Error(response.statusText)
+		}
+
+		return await response.json();
+	}
 
   return (
     <label>
       <input
         type="checkbox"
-        onChange={() => {
+        onChange={async (event) => {
           setIsChecked(!isChecked);
+					try {
+						await updateStatus(props.id, props.value, props.status)
+					} catch (err) {
+						console.log(err)
+					}
         }}
 				disabled={props.disabled? true: false}
       />

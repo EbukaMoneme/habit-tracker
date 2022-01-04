@@ -1,72 +1,28 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useQuery, useMutation, queryCache } from "react-query";
 import WeeklyContainer from '../components/WeeklyContainer'
 
 import styles from '../styles/Home.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-import moment from 'moment'
 import Clock from 'react-live-clock'
+import moment from 'moment'
 import DailyContainer from '../components/dailyContainer'
+import useDate from '../hooks/useDate.js';
+
+async function fetchHabitsRequest() {
+	const response = await fetch('/api/habits');
+	const data = await response.json();
+	const { habits } = data;
+	return habits;
+}
 
 export default function Home() {
-	const habits = [
-		{
-			title: 'Read',
-			description: 'Read 30 minutes a day',
-			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			color: 'red'
-		},
-		{
-			title: 'Workout',
-			description: 'Get a sweat in for 1 hour, 3 times a week',
-			frequency: ['Monday', 'Wednesday', 'Friday'],
-			color: 'blue'
-		},
-		{
-			title: 'Cooking',
-			description: 'Make a new recipe',
-			frequency: ['Monday', 'Wednesday', 'Thursday', 'Friday'],
-			color: 'green'
-		},
-		{
-			title: 'Meditate',
-			description: 'Focus',
-			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			color: 'pink'
-		},
-		{
-			title: 'Journal',
-			description: 'Reflect',
-			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			color: 'orange'
-		},
-		{
-			title: 'Meditate',
-			description: 'Focus',
-			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			color: 'pink'
-		},
-		{
-			title: 'Meditate',
-			description: 'Focus',
-			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			color: 'pink'
-		},
-		{
-			title: 'Journal',
-			description: 'Reflect',
-			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			color: 'orange'
-		},
-		{
-			title: 'Meditate',
-			description: 'Focus',
-			frequency: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			color: 'pink'
-		}
-	]
+	const { date, time, wish } = useDate();
+
+	const {data: habits} = useQuery('habits', fetchHabitsRequest)
 
   return (
     <div className={styles.container}>
@@ -80,16 +36,14 @@ export default function Home() {
 				<div className={styles.weeklyview}>
 					<div className={styles.header}>
 						<h1 className={styles.title}>
-							Welcome <span>Ebuka!</span>
+						{wish} <span>Ebuka!</span>
 						</h1>
 
 						<p className={styles.description}>
 							It's {' '}
 							<span>
-								<Clock 
-									format={'h:mma'}
-									ticking={true}	
-								/>
+								{time}
+								
 							</span>
 							{' '}
 							on <span>{moment().format('dddd')} {moment().format('ll')}</span>
@@ -110,40 +64,8 @@ export default function Home() {
 				<div className={styles.dailyview}>
 					<DailyContainer habits={habits}/>
 				</div>
-				
-
-        {/* <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div> */}
       </main>
 			
-
       <footer className={styles.footer}>
         <a
           href="https://www.flexibly.ai/"
