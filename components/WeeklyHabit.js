@@ -19,7 +19,7 @@ export default function WeeklyHabit(props) {
 					color={props.color}
 					default={true}
 					disabled={false}
-					status={props.status}
+					status={status}
 				/>)
 			}
 			if (status[day] === false) {
@@ -32,7 +32,7 @@ export default function WeeklyHabit(props) {
 					color={props.color}
 					default={false}
 					disabled={false}
-					status={props.status}
+					status={status}
 				/>)
 			}
 			if (status[day] === '') {

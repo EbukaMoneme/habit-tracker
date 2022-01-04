@@ -7,7 +7,6 @@ import styles from '../styles/Home.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-import Clock from 'react-live-clock'
 import moment from 'moment'
 import DailyContainer from '../components/dailyContainer'
 import useDate from '../hooks/useDate.js';
@@ -62,7 +61,7 @@ export default function Home() {
 					<WeeklyContainer habits={habits}/>
 				</div>
 				<div className={styles.dailyview}>
-					<DailyContainer habits={habits}/>
+					<DailyContainer today={moment().format('dddd')} habits={habits}/>
 				</div>
       </main>
 			
