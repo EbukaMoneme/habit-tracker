@@ -10,18 +10,54 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import moment from 'moment'
 import DailyContainer from '../components/dailyContainer'
 import useDate from '../hooks/useDate.js';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import useIsChecked from '../hooks/useIsChecked';
+import { prisma } from "../src/db";
 
-async function fetchHabitsRequest() {
-	const response = await fetch('/api/habits');
-	const data = await response.json();
-	const { habits } = data;
-	return habits;
+// async function fetchHabitsRequest() {
+// 	const response = await fetch('/api/habits');
+// 	const data = await response.json();
+// 	const { habits } = data;
+// 	habits = habits.sort((a, b) =>  a.id - b.id)
+// 	return habits;
+// }
+
+export const getServerSideProps = async () => {
+	// const res = await fetch('/api/habits');
+	const habits = await prisma.habit.findMany();
+	const sortedHabits = habits.sort((a, b) =>  a.id - b.id)
+	console.log(habits)
+	// const data = await res.json();
+
+	return {
+		props: { habits: sortedHabits }
+	}
 }
 
-export default function Home() {
+export default function Home({ habits }) {
 	const { date, time, wish } = useDate();
+	const {isChecked, setIsChecked } = useIsChecked();
 
-	const {data: habits} = useQuery('habits', fetchHabitsRequest)
+	const router = useRouter()
+	// const [habits, setHabits] = useState([]);
+
+	// useEffect(() => {
+	// 	axios.get('/api/habits')
+	// 		.then((res) => {
+	// 			console.log("Result", res)
+	// 			const habitData = [...res.data.habits]
+	// 			habitData.sort((a, b) =>  a.id - b.id)
+	// 			setHabits(habitData)
+	// 		})
+	// }, [])
+	
+
+	// const {data: habits} = useQuery(['habits'], fetchHabitsRequest, {
+	// 	// refetchOnWindowFocus: "always",
+	// 	// cacheTime: Infinity
+	// })
 
   return (
     <div className={styles.container}>
@@ -58,10 +94,10 @@ export default function Home() {
 
 					</div>
 					<hr/>
-					<WeeklyContainer habits={habits}/>
+					<WeeklyContainer habits={habits} router={router} />
 				</div>
 				<div className={styles.dailyview}>
-					<DailyContainer today={moment().format('dddd')} habits={habits}/>
+					<DailyContainer today={moment().format('dddd')} habits={habits} router={router}/>
 				</div>
       </main>
 			
@@ -79,3 +115,4 @@ export default function Home() {
     </div>
   )
 }
+

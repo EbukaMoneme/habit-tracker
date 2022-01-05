@@ -1,9 +1,10 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import { prisma } from "../../../src/db";
 
 export default async function (req, res) {
-	const prisma = new PrismaClient({log: ["query"]});
+	// const prisma = new PrismaClient({log: ["query"]});
 
 	try {
 		const {id, day, status} = JSON.parse(req.body);

@@ -5,9 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function DailyHabit(props) {
-	// console.log(props)
-	const [isCompleted, setIsCompleted] = useState(props.default? true : false)
-	console.log(props.default)
+	const [isCompleted, setIsCompleted] = useState(props.default)
 
 	async function updateStatus(id, day, status) {
 		const newStatus = {id, day, status}
@@ -15,11 +13,9 @@ export default function DailyHabit(props) {
 			method: 'PUT',
 			body: JSON.stringify(newStatus)
 		})
-
 		if (!response.ok) {
 			throw new Error(response.statusText)
 		}
-
 		return await response.json();
 	}
 
@@ -49,6 +45,8 @@ export default function DailyHabit(props) {
 								await updateStatus(props.id, props.value, props.status)
 							} catch (err) {
 								console.log(err)
+							} finally {
+								props.router.reload()
 							}
 						}}
 					>Undo</button>

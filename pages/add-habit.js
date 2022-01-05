@@ -7,28 +7,6 @@ import axios from 'axios';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Link from 'next/link';
-import { useQuery, useMutation, queryCache, useQueryClient } from "react-query";
-import useCreateHabitRequest from '../hooks/useCreateHabitRequest';
-// const createHabitRequest = (habit) => {
-	
-// }
-
-// async function createHabitRequest(habitData) {
-// 	const response = await fetch("/api/habits/create", {
-// 		method: "POST",
-// 		headers: {
-// 			"Content-Type": "application/json"
-// 		},
-// 		body: JSON.stringify({habitData})
-// 	})
-// 	const data = await response.json();
-// 	const { habit } = data;
-// 	return data;
-// }
-
-// function useCreateHabit() {
-// 	return useMutation(createHabitRequest);
-// }
 
 export default function AddHabit() {
 	const [state, setState] = useState({
@@ -65,34 +43,8 @@ export default function AddHabit() {
 			newFrequency.push(val)
 			week[val] = false;
 		}
-
-		// const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-		
-		// for (let day of state.frequency) {
-		// 	if (state.frequency.includes(day)) {
-		// 		week[day] = false;
-		// 	} else {
-		// 		week[day] = '';
-		// 	}
-		// }
-
-
 		setState({...state, frequency: newFrequency, status: week })
 	}
-
-	// const completedStatus = () => {
-	// 	// const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-	// 	// const week = {}
-	// 	// for (let day of days) {
-	// 	// 	if (state.frequency.includes(day)) {
-	// 	// 		week[day] = false;
-	// 	// 	} else {
-	// 	// 		week[day] = null;
-	// 	// 	}
-	// 	// }
-	// 	return week;
-	// }
-	// const status = completedStatus();
 
 	const newHabit = {
 		title: state.title,
@@ -101,19 +53,6 @@ export default function AddHabit() {
 		frequency: state.frequency,
 		status: state.status
 	}
-	
-	// const createHabit = useCreateHabit();
-
-	// const handleSubmit = () => {
-	// 	const newHabit = {
-	// 		title: state.title,
-  //   	color: state.color,
-  //   	description: state.description,
-  //   	frequency: state.frequency
-	// 	}
-	// 	useCreateHabitRequest(newHabit);
-	// 	// const queryClient = useQueryClient();
-
 		
 	async function addHabit(habit) {
 		const response = await fetch('/api/habits/create', {
@@ -127,14 +66,6 @@ export default function AddHabit() {
 
 		return await response.json();
 	}
-		
-	// 	// createHabit.mutate({
-	// 	// 	title: state.title,
-  //   // 	color: state.color,
-  //   // 	description: state.description,
-  //   // 	frequency: state.frequency
-	// 	// })
-	// }
 
 	return (
 		<div className={styles.container}>
@@ -155,9 +86,7 @@ export default function AddHabit() {
 							console.log(err)
 						} finally {
 							Router.push('/')
-
 						}
-						// handleSubmit()
 					}}
 				>
 					<Link href="/">

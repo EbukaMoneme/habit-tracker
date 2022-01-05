@@ -21,9 +21,6 @@ export default function useDate() {
   const wish = `Good ${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}, `;
 
   let time = today.toLocaleTimeString(locale, { hour: 'numeric', hour12: true, minute: 'numeric' });
-	const newTime = time.split(' ');
-	newTime[1] = newTime[1].toLowerCase();
-	time = newTime.join('')
 	
   return {
     date,

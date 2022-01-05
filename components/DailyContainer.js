@@ -16,38 +16,27 @@ export default function DailyContainer(props) {
 		for (let habit of props.habits) {
 
 			for (let day in habit.status) {
-				if (habit.status[day] === true) {
+				if (habit.status[day] !== '') {
 					parsedHabits.push(<DailyHabit 
 						{...habit} 
-						default={true} 
+						default={habit.status[day]} 
 						value={day}
 						id={habit.id} 
 						status={habit.status}
 						key={count}
+						router={props.router}
 					/>)
-				} else if (habit.status[day] === false){
-					parsedHabits.push(<DailyHabit 
-						{...habit} 
-						default={false} 
-						value={day}
-						id={habit.id} 
-						status={habit.status}
-						key={count}
-					/>)
-				}
+				} 
 				count++;
 			}
-			
 		}
 		return parsedHabits;
 	}
 
-	
 	const forward = () => { setDay(prev => prev + 1) }
 	const backward = () => { setDay(prev => prev - 1) }
 
 	const query = () => {
-		
 		return week[day]
 	}
 

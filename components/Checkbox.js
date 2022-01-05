@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function Checkbox(props) {
-  const [isChecked, setIsChecked] = useState(props.default === true? true : false);
+  const [isChecked, setIsChecked] = useState(props.default);
 
 	async function updateStatus(id, day, status) {
 		const newStatus = {id, day, status}
@@ -27,6 +27,8 @@ function Checkbox(props) {
 						await updateStatus(props.id, props.value, props.status)
 					} catch (err) {
 						console.log(err)
+					} finally {
+						props.router.reload()
 					}
         }}
 				disabled={props.disabled? true: false}

@@ -9,34 +9,20 @@ export default function WeeklyHabit(props) {
 		
 		const inputs = []
 		for (let day of week) {
-			if (status[day] === true) {
-				// inputs.push(<input style={{backgroundColor: props.color}} className="check" type="checkbox" id={day} name={day} value={day}/>)
+			if (status[day] !== '') {
 				inputs.push(<Checkbox
 					type="checkbox" 
 					id={props.id} 
 					name={day} 
 					value={day}
 					color={props.color}
-					default={true}
+					default={status[day]}
 					disabled={false}
 					status={status}
-				/>)
-			}
-			if (status[day] === false) {
-				// inputs.push(<input style={{backgroundColor: props.color}} className="check" type="checkbox" id={day} name={day} value={day}/>)
-				inputs.push(<Checkbox
-					type="checkbox" 
-					id={props.id} 
-					name={day} 
-					value={day}
-					color={props.color}
-					default={false}
-					disabled={false}
-					status={status}
+					router={props.router}
 				/>)
 			}
 			if (status[day] === '') {
-				// inputs.push(<input style={{backgroundColor: props.color}} className="check" type="checkbox" id={day} name={day} value={day} disabled/>)
 				inputs.push(<Checkbox
 					type="checkbox" 
 					id={props.id} 

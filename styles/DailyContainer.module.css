@@ -66,4 +66,5 @@
 .moverIconRight:hover, .moverIconLeft:hover {
 	border: 1px solid #0070f3;
 	color: #0070f3;
+	transition: all 150ms;
 }
