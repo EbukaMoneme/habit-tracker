@@ -71,7 +71,7 @@ export default function Home({ habits }) {
 				<div className={styles.weeklyview}>
 					<div className={styles.header}>
 						<h1 className={styles.title}>
-						{wish} <span>Ebuka!</span>
+						{wish} <span>Levon!</span>
 						</h1>
 
 						<p className={styles.description}>
