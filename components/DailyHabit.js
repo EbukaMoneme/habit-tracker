@@ -7,17 +7,17 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 export default function DailyHabit(props) {
 	const [isCompleted, setIsCompleted] = useState(props.default)
 
-	async function updateStatus(id, day, status) {
-		const newStatus = {id, day, status}
-		const response = await fetch('/api/habits/update', {
-			method: 'PUT',
-			body: JSON.stringify(newStatus)
-		})
-		if (!response.ok) {
-			throw new Error(response.statusText)
-		}
-		return await response.json();
-	}
+	// async function updateStatus(id, day, status) {
+	// 	const newStatus = {id, day, status}
+	// 	const response = await fetch('/api/habits/update', {
+	// 		method: 'PUT',
+	// 		body: JSON.stringify(newStatus)
+	// 	})
+	// 	if (!response.ok) {
+	// 		throw new Error(response.statusText)
+	// 	}
+	// 	return await response.json();
+	// }
 
 	return (
 		<div 
@@ -42,12 +42,10 @@ export default function DailyHabit(props) {
 						onClick={async () => {
 							setIsCompleted(!isCompleted)
 							try {
-								await updateStatus(props.id, props.value, props.status)
+								await props.updateStatus(props.id, props.value, props.status)
 							} catch (err) {
 								console.log(err)
-							} finally {
-								props.router.reload()
-							}
+							} 
 						}}
 					>Undo</button>
 				</div>
@@ -57,7 +55,7 @@ export default function DailyHabit(props) {
 				onClick={async () => {
 					setIsCompleted(!isCompleted)
 					try {
-						await updateStatus(props.id, props.value, props.status)
+						await props.updateStatus(props.id, props.value, props.status)
 					} catch (err) {
 						console.log(err)
 					}

@@ -19,7 +19,7 @@ export default function WeeklyHabit(props) {
 					default={status[day]}
 					disabled={false}
 					status={status}
-					router={props.router}
+					updateStatus={props.updateStatus}
 				/>)
 			}
 			if (status[day] === '') {

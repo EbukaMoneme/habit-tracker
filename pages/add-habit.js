@@ -2,7 +2,6 @@ import Head from 'next/head'
 import { useState } from 'react'
 import Router from 'next/router';
 import styles from '../styles/AddHabit.module.css'
-import axios from 'axios';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";

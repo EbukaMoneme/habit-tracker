@@ -24,7 +24,7 @@ export default function DailyContainer(props) {
 						id={habit.id} 
 						status={habit.status}
 						key={count}
-						router={props.router}
+						updateStatus={props.updateStatus}
 					/>)
 				} 
 				count++;

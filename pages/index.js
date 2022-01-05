@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useQuery, useMutation, queryCache } from "react-query";
-import WeeklyContainer from '../components/WeeklyContainer'
+import WeeklyContainer from '../components/WeeklyContainer';
 
 import styles from '../styles/Home.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,29 +14,30 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useIsChecked from '../hooks/useIsChecked';
-import { prisma } from "../src/db";
+// import { prisma } from "../src/db";
+import updateStatus from "../hooks/useUpdateStatus"
 
-// async function fetchHabitsRequest() {
-// 	const response = await fetch('/api/habits');
-// 	const data = await response.json();
-// 	const { habits } = data;
-// 	habits = habits.sort((a, b) =>  a.id - b.id)
-// 	return habits;
-// }
-
-export const getServerSideProps = async () => {
-	// const res = await fetch('/api/habits');
-	const habits = await prisma.habit.findMany();
-	const sortedHabits = habits.sort((a, b) =>  a.id - b.id)
-	console.log(habits)
-	// const data = await res.json();
-
-	return {
-		props: { habits: sortedHabits }
-	}
+async function fetchHabitsRequest() {
+	const response = await fetch('/api/habits');
+	const data = await response.json();
+	const { habits } = data;
+	habits = habits.sort((a, b) =>  a.id - b.id)
+	return habits;
 }
 
-export default function Home({ habits }) {
+// export const getServerSideProps = async () => {
+// 	// const res = await fetch('/api/habits');
+// 	const habits = await prisma.habit.findMany();
+// 	const sortedHabits = habits.sort((a, b) =>  a.id - b.id)
+// 	console.log(habits)
+// 	// const data = await res.json();
+
+// 	return {
+// 		props: { habits: sortedHabits }
+// 	}
+// }
+
+export default function Home() {
 	const { date, time, wish } = useDate();
 	const {isChecked, setIsChecked } = useIsChecked();
 
@@ -54,10 +55,11 @@ export default function Home({ habits }) {
 	// }, [])
 	
 
-	// const {data: habits} = useQuery(['habits'], fetchHabitsRequest, {
-	// 	// refetchOnWindowFocus: "always",
-	// 	// cacheTime: Infinity
-	// })
+	const {data: habits} = useQuery(['habits', 'updateStatus'], fetchHabitsRequest, {
+		refetchOnWindowFocus: "always",
+		// cacheTime: Infinity
+	})
+	
 
   return (
     <div className={styles.container}>
@@ -94,10 +96,10 @@ export default function Home({ habits }) {
 
 					</div>
 					<hr/>
-					<WeeklyContainer habits={habits} router={router} />
+					<WeeklyContainer habits={habits} updateStatus={updateStatus}/>
 				</div>
 				<div className={styles.dailyview}>
-					<DailyContainer today={moment().format('dddd')} habits={habits} router={router}/>
+					<DailyContainer today={moment().format('dddd')} habits={habits} updateStatus={updateStatus} />
 				</div>
       </main>
 			
