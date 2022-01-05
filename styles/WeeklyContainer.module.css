@@ -17,3 +17,10 @@
 	justify-content: center;
 	color: rgb(155, 155, 155);
 }
+
+/* Media Queries */
+@media (max-width: 600px) {
+	.label {
+		font-size: 0.8em;
+	}
+}

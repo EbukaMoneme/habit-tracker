@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
 export default function WeeklyHabit(props) {
+
+	// formats checkbox for each day of the week
 	const formatChecklist = (status) => {
 		const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 		
@@ -20,6 +22,8 @@ export default function WeeklyHabit(props) {
 					disabled={false}
 					status={status}
 					router={props.router}
+					key={Math.random()}
+					updateStatus={props.updateStatus}
 				/>)
 			}
 			if (status[day] === '') {
@@ -27,10 +31,8 @@ export default function WeeklyHabit(props) {
 					type="checkbox" 
 					id={props.id} 
 					name={day} 
-					value={day}
-					color={props.color}
 					disabled={true}
-					status={props.status}
+					key={Math.random()}
 				/>)
 			}
 		}
@@ -43,7 +45,8 @@ export default function WeeklyHabit(props) {
 	return (
 		<div className={styles.habit}>
 			<div className={styles.title}>
-			  <FontAwesomeIcon style={{color: props.color}} icon={faCircle}></FontAwesomeIcon> {props.title}
+			  <FontAwesomeIcon className={styles.icon} style={{color: props.color}} icon={faCircle}></FontAwesomeIcon> 
+				<div className={styles.habitName}>{props.title}</div>
 			</div>
 			<form className={styles.checklist}>
 				{formatChecklist(props.status)}

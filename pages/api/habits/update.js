@@ -1,18 +1,12 @@
-
-import { NextApiRequest, NextApiResponse } from "next";
-// import { PrismaClient } from "@prisma/client";
 import { prisma } from "../../../src/db";
 
 export default async function (req, res) {
-	// const prisma = new PrismaClient({log: ["query"]});
-
 	try {
+		// recieve habit-day info
 		const {id, day, status} = JSON.parse(req.body);
-		console.log(day)
-		console.log(status)
+		// toggle status for day
 		status[day] = !status[day]
-		console.log(status)
-
+		// update database record
 		await prisma.habit.update({
 			where: {
 				id: Number(id)
@@ -21,7 +15,7 @@ export default async function (req, res) {
 				status: status
 			}
 		})
-		res.json("Successfully cleared habits!");
+		res.json("Successfully updated habit!");
 	} catch (err) {
 		res.status(500).json({err: `Unable to update habit because ${err}`})
 	} finally {

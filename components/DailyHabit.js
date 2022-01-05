@@ -7,21 +7,25 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 export default function DailyHabit(props) {
 	const [isCompleted, setIsCompleted] = useState(props.default)
 
-	async function updateStatus(id, day, status) {
-		const newStatus = {id, day, status}
-		const response = await fetch('/api/habits/update', {
-			method: 'PUT',
-			body: JSON.stringify(newStatus)
-		})
-		if (!response.ok) {
-			throw new Error(response.statusText)
+	const toggleCompleted = async () => {
+		// Toggle completed status
+		setIsCompleted(!isCompleted)
+
+		try {
+			// Update database
+			await props.updateStatus(props.id, props.value, props.status)
+		} catch (err) {
+			console.log(err)
+		} finally {
+			// Reload page to re-fetch habit props
+			props.router.reload()
 		}
-		return await response.json();
 	}
 
 	return (
 		<div 
 			className={styles.habit} 
+			// conditional style change
 			style={
 				isCompleted?
 				{backgroundColor: props.color, color: 'white'}
@@ -31,38 +35,19 @@ export default function DailyHabit(props) {
 		>
 			<div className={styles.title}>{props.title}</div>
 			{isCompleted?
-				
 				<div className={styles.habitfooter}>
 					<div >
 						<FontAwesomeIcon icon={faCheck}></FontAwesomeIcon> {' '}
 						Completed
 					</div>
-					<button 
-						className={styles.undo} 
-						onClick={async () => {
-							setIsCompleted(!isCompleted)
-							try {
-								await updateStatus(props.id, props.value, props.status)
-							} catch (err) {
-								console.log(err)
-							} finally {
-								props.router.reload()
-							}
-						}}
-					>Undo</button>
+					<button className={styles.undo} onClick={toggleCompleted}>
+						Undo
+					</button>
 				</div>
 				:
-				<button 
-				className={styles.completebutton}
-				onClick={async () => {
-					setIsCompleted(!isCompleted)
-					try {
-						await updateStatus(props.id, props.value, props.status)
-					} catch (err) {
-						console.log(err)
-					}
-				}}
-			>Mark Complete</button>
+				<button className={styles.completebutton} onClick={toggleCompleted}>
+					Mark Complete
+				</button>
 			}
 		</div>
 	)

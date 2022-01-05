@@ -1,12 +1,8 @@
-
-import { NextApiRequest, NextApiResponse } from "next";
-// import { PrismaClient } from "@prisma/client";
 import { prisma } from "../../../src/db";
 
 export default async function (req, res) {
-	// const prisma = new PrismaClient({log: ["query"]});
-
 	try {
+		// Fetch all habits
 		const habits = await prisma.habit.findMany();
 		res.status(200).json({ habits })
 	} catch (err) {
@@ -14,5 +10,4 @@ export default async function (req, res) {
 	} finally {
 		await prisma.$disconnect(); 
 	}
-
 }

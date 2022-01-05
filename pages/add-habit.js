@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import Router from 'next/router';
-import styles from '../styles/AddHabit.module.css'
-import axios from 'axios';
+import Link from 'next/link';
 
+import styles from '../styles/AddHabit.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import Link from 'next/link';
+import addHabit from '../hooks/useAddHabit';
 
 export default function AddHabit() {
 	const [state, setState] = useState({
@@ -22,20 +22,26 @@ export default function AddHabit() {
 			'Friday': '', 
 			'Saturday': '', 
 			'Sunday': ''
-		}
+		},
+		error: false
   })
 
-	const selected = (val) => {
-		return state.frequency.includes(val)
-	}
-
+	// Change state for all keys except status and frequency
 	const changeState = (key, val) => {
 		setState({...state, [key]: val })
 	}
 
-	const changeFrequency = (val) => {
+	// Returns whether frequency contains the specific value
+	const selected = (val) => {
+		return state.frequency.includes(val)
+	}
+
+	// change status and frequency on button click
+	const changeStatusAndFrequency = (val) => {
 		const newFrequency = [...state.frequency]
 		const week = {...state.status}
+		// If day clicked is in frequency, remove it, otherwise add it
+		// similarly update status
 		if (selected(val)) {
 			newFrequency = newFrequency.filter(day => day !== val)
 			week[val] = '';
@@ -43,9 +49,10 @@ export default function AddHabit() {
 			newFrequency.push(val)
 			week[val] = false;
 		}
-		setState({...state, frequency: newFrequency, status: week })
+		setState({...state, frequency: newFrequency, status: week, error: false })
 	}
 
+	// new habit for submission
 	const newHabit = {
 		title: state.title,
 		color: state.color,
@@ -53,18 +60,23 @@ export default function AddHabit() {
 		frequency: state.frequency,
 		status: state.status
 	}
-		
-	async function addHabit(habit) {
-		const response = await fetch('/api/habits/create', {
-			method: 'POST',
-			body: JSON.stringify(habit)
-		})
 
-		if (!response.ok) {
-			throw new Error(response.statusText)
+	// add habit to database
+	const handleSubmit = async (event) => {
+		event.preventDefault()
+		// If frequency is not empty, add habit to database
+		if (state.frequency.length > 0) {
+			try {
+				await addHabit(newHabit)
+			} catch (err) {
+				console.log(err)
+			} finally {
+				Router.push('/')
+			}
+		} else {
+			// otherwise show error
+			return changeState('error', !state.error)
 		}
-
-		return await response.json();
 	}
 
 	return (
@@ -76,19 +88,7 @@ export default function AddHabit() {
       </Head>
 
 			<main className={styles.main}>
-				<form 
-					className={styles.form}
-					onSubmit={async (event) => {
-						event.preventDefault()
-						try {
-							await addHabit(newHabit)
-						} catch (err) {
-							console.log(err)
-						} finally {
-							Router.push('/')
-						}
-					}}
-				>
+				<form className={styles.form} onSubmit={handleSubmit}>
 					<Link href="/">
 						<a className={styles.backDiv}>
 							<div className={styles.back}>
@@ -97,9 +97,11 @@ export default function AddHabit() {
 							<div className={styles.backText}>Back</div>
 						</a>
 					</Link>
+
 					<h1 className={styles.title}>
 						New <span>Habit</span>
 					</h1>
+
 					<div className={styles.firstInput}>
 						<div className={`${styles.inputDiv} ${styles.titleDiv}`}>
 							<label htmlFor="title">Name this habit</label>
@@ -110,8 +112,10 @@ export default function AddHabit() {
 								name="title" 
 								value={state.title}
 								onChange={(event) => changeState("title", event.target.value)}
+								required
 							/>
 						</div>
+
 						<div className={`${styles.inputDiv} ${styles.colorDiv}`}>
 							<label htmlFor="color">Color</label>
 							<input 
@@ -124,6 +128,7 @@ export default function AddHabit() {
 							/>
 						</div>
 					</div>
+
 					<div className={styles.inputDiv}>
 						<label htmlFor="description">Describe this habit</label>
 						<textarea
@@ -134,93 +139,116 @@ export default function AddHabit() {
 							onChange={(event) => changeState("description", event.target.value)}
 						/>
 					</div>
+
 					<div className={styles.inputDiv}>
 						<label htmlFor="frequency">Habit Frequency</label>
+
 						<div className={styles.frequencyButtons}>
 							<button 
 								className={
-									selected("Monday")?
+									`${styles.frequencyOption}
+									${selected("Monday")?
 									styles.selected:
-									styles.unselected}
+									styles.unselected}`
+								}
 								name="frequency" 
 								value="Monday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeFrequency(event.target.value)
+									changeStatusAndFrequency(event.target.value)
 								}}
 							> Mon </button>
 							<button 
 								className={
-									selected("Tuesday")?
+									`${styles.frequencyOption}
+									${selected("Tuesday")?
 									styles.selected:
-									styles.unselected}
+									styles.unselected}`
+								}
 								name="frequency" 
 								value="Tuesday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeFrequency(event.target.value)
+									changeStatusAndFrequency(event.target.value)
 								}}
 							> Tue </button>
 							<button 
 								className={
-									selected("Wednesday")?
+									`${styles.frequencyOption}
+									${selected("Wednesday")?
 									styles.selected:
-									styles.unselected}
+									styles.unselected}`
+								}
 								name="frequency" 
 								value="Wednesday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeFrequency(event.target.value)
+									changeStatusAndFrequency(event.target.value)
 								}}
 							> Wed </button>
 							<button 
 								className={
-									selected("Thursday")?
+									`${styles.frequencyOption}
+									${selected("Thursday")?
 									styles.selected:
-									styles.unselected}
+									styles.unselected}`
+								}
 								name="frequency" 
 								value="Thursday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeFrequency(event.target.value)
+									changeStatusAndFrequency(event.target.value)
 								}}
 							> Thu </button>
 							<button 
 								className={
-									selected("Friday")?
+									`${styles.frequencyOption}
+									${selected("Friday")?
 									styles.selected:
-									styles.unselected}
+									styles.unselected}`
+								}
 								name="frequency" 
 								value="Friday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeFrequency(event.target.value)
+									changeStatusAndFrequency(event.target.value)
 								}}
 							> Fri </button>
 							<button 
 								className={
-									selected("Saturday")?
+									`${styles.frequencyOption}
+									${selected("Saturday")?
 									styles.selected:
-									styles.unselected} 
+									styles.unselected}`
+								} 
 								name="frequency" 
 								value="Saturday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeFrequency(event.target.value)
+									changeStatusAndFrequency(event.target.value)
 								}}
 							> Sat </button>
 							<button 
 								className={
-									selected("Sunday")?
+									`${styles.frequencyOption}
+									${selected("Sunday")?
 									styles.selected:
-									styles.unselected}
+									styles.unselected}`
+								}
 								name="frequency" 
 								value="Sunday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeFrequency(event.target.value)
+									changeStatusAndFrequency(event.target.value)
 								}}
 							> Sun </button>
+						</div>
+						<div className={
+							state.error?
+							styles.message:
+							styles.hidden
+						}>
+							Please select when you want to do this habit!
 						</div>
 					</div>
 				  <button className={styles.submit} type="submit">Create Habit</button>
