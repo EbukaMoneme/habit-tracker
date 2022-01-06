@@ -1,5 +1,5 @@
 ## Purpose
-This project was completed as part of a techincal assessment for Flexibly.ai. This project uses Next Js, a PSQL database and prisma to connect them.
+This project was completed as part of a techincal assessment. This project uses Next Js, a postgres database and prisma to connect them.
 
 ## Final Product
 ![](https://github.com/EbukaMoneme/habit-tracker/blob/main/docs/habit-tracker-video.gif?raw=true)
