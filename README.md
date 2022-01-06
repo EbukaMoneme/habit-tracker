@@ -11,6 +11,10 @@ This project was completed as part of a techincal assessment for Flexibly.ai. Th
 2. ✅ User can see a weekly checklist of habits as well as a daily view.
 3. ✅ By completing a habit in the weekly view, the correlated habit in the daily view changes as well, or vice versa!
 
+### Bonus features
+
+1. ✅ Users are met with an error message when trying to create a habit without any frequency specification.
+
 ## Technical Specifications
 
 ### Dependencies
