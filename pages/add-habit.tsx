@@ -38,7 +38,7 @@ export default function AddHabit() {
 
 	// change status and frequency on button click
 	const changeStatusAndFrequency = (val) => {
-		const newFrequency = [...state.frequency]
+		let newFrequency = [...state.frequency]
 		const week = {...state.status}
 		// If day clicked is in frequency, remove it, otherwise add it
 		// similarly update status
@@ -155,7 +155,7 @@ export default function AddHabit() {
 								value="Monday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeStatusAndFrequency(event.target.value)
+									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
 								}}
 							> Mon </button>
 							<button 
@@ -169,7 +169,7 @@ export default function AddHabit() {
 								value="Tuesday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeStatusAndFrequency(event.target.value)
+									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
 								}}
 							> Tue </button>
 							<button 
@@ -183,7 +183,7 @@ export default function AddHabit() {
 								value="Wednesday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeStatusAndFrequency(event.target.value)
+									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
 								}}
 							> Wed </button>
 							<button 
@@ -197,7 +197,7 @@ export default function AddHabit() {
 								value="Thursday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeStatusAndFrequency(event.target.value)
+									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
 								}}
 							> Thu </button>
 							<button 
@@ -211,7 +211,7 @@ export default function AddHabit() {
 								value="Friday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeStatusAndFrequency(event.target.value)
+									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
 								}}
 							> Fri </button>
 							<button 
@@ -225,7 +225,7 @@ export default function AddHabit() {
 								value="Saturday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeStatusAndFrequency(event.target.value)
+									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
 								}}
 							> Sat </button>
 							<button 
@@ -239,7 +239,7 @@ export default function AddHabit() {
 								value="Sunday"
 								onClick={(event) => {
 									event.preventDefault()
-									changeStatusAndFrequency(event.target.value)
+									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
 								}}
 							> Sun </button>
 						</div>
