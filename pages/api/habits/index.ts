@@ -1,6 +1,8 @@
 import { prisma } from "../../../src/db";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { Habit } from "../../../types";
 
-export default async function (req, res) {
+export default async function (req: NextApiRequest, res: NextApiResponse){
 	try {
 		// Fetch all habits
 		const habits = await prisma.habit.findMany();

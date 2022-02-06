@@ -6,7 +6,7 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons";
 export default function WeeklyHabit(props) {
 
 	// formats checkbox for each day of the week
-	const formatChecklist = (status) => {
+	const formatChecklist = (status: { [x: string]: string; }) => {
 		const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 		
 		const inputs = []

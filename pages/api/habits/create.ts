@@ -1,6 +1,7 @@
 import { prisma } from "../../../src/db";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function (req, res) {
+export default async function (req :NextApiRequest, res: NextApiResponse) {
 	try {
 		// Create habit with info from form
 		const data = JSON.parse(req.body);

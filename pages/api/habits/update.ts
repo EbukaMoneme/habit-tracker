@@ -1,6 +1,7 @@
 import { prisma } from "../../../src/db";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function (req, res) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
 		// recieve habit-day info
 		const {id, day, status} = JSON.parse(req.body);

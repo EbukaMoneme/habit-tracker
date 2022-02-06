@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 
 import WeeklyContainer from '../components/WeeklyContainer';
-import DailyContainer from '../components/dailyContainer';
+import DailyContainer from '../components/DailyContainer';
 
 import styles from '../styles/Home.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,16 +15,19 @@ import updateStatus from '../hooks/useUpdateStatus';
 import { useRouter } from 'next/router';
 import { prisma } from "../src/db";
 
-export const getServerSideProps = async () => {
-	const habits = await prisma.habit.findMany();
-	const sortedHabits = habits.sort((a, b) =>  a.id - b.id);
+import { GetServerSideProps } from 'next';
+import { Habit } from '../types';
+
+export const getServerSideProps: GetServerSideProps = async () => {
+	const habits: any = await prisma.habit.findMany();
+	const sortedHabits: Habit[] = habits.sort((a: Habit, b: Habit) =>  a.id - b.id);
 
 	return {
 		props: { habits: sortedHabits }
 	}
 }
 
-export default function Home({ habits }) {
+export default function Home({ habits }: any) {
 	const { time, wish } = useDate();
 	const router = useRouter()
 

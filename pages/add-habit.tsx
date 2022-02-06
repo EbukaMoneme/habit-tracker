@@ -27,17 +27,17 @@ export default function AddHabit() {
   })
 
 	// Change state for all keys except status and frequency
-	const changeState = (key, val) => {
+	const changeState = (key: string, val: string | boolean) => {
 		setState({...state, [key]: val })
 	}
 
 	// Returns whether frequency contains the specific value
-	const selected = (val) => {
+	const selected = (val: string) => {
 		return state.frequency.includes(val)
 	}
 
 	// change status and frequency on button click
-	const changeStatusAndFrequency = (val) => {
+	const changeStatusAndFrequency = (val: string) => {
 		let newFrequency = [...state.frequency]
 		const week = {...state.status}
 		// If day clicked is in frequency, remove it, otherwise add it
@@ -62,7 +62,7 @@ export default function AddHabit() {
 	}
 
 	// add habit to database
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: { preventDefault: () => void; }) => {
 		event.preventDefault()
 		// If frequency is not empty, add habit to database
 		if (state.frequency.length > 0) {

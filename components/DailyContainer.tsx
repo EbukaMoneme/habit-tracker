@@ -8,7 +8,7 @@ import { useState } from "react";
 export default function DailyContainer(props) {
 
 	// determine current day
-	const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+	const week: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 	const [day, setDay] = useState(week.indexOf(props.today))
 
 	// Format habits to daily view
