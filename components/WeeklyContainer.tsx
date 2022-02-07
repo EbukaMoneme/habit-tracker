@@ -11,7 +11,7 @@ export default function WeeklyContainer(props) {
 	
 	// map labels for the weekly checklist
 	const week: string[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-	const parsedLabels = week.map((label, index) => {
+	const parsedLabels = week.map((label: string, index: number) => {
 		return <div className={styles.label} key={index} >{label}</div>
 	})
 

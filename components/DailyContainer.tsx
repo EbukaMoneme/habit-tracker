@@ -9,7 +9,7 @@ export default function DailyContainer(props) {
 
 	// determine current day
 	const week: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-	const [day, setDay] = useState(week.indexOf(props.today))
+	const [day, setDay] = useState<number>(week.indexOf(props.today));
 
 	// Format habits to daily view
 	const formatHabits = () => {

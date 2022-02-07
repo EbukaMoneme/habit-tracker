@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function Checkbox(props) {
 
-  const [isChecked, setIsChecked] = useState(props.default);
+  const [isChecked, setIsChecked] = useState<boolean>(props.default);
 
 	const toggleChecked = async () => {
 		// Toggle completed status

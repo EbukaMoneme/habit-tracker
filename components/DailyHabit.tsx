@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function DailyHabit(props) {
-	const [isCompleted, setIsCompleted] = useState(props.default)
+	const [isCompleted, setIsCompleted] = useState<boolean>(props.default)
 
 	const toggleCompleted = async () => {
 		// Toggle completed status
