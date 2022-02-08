@@ -6,9 +6,9 @@ import DailyContainer from '../components/DailyContainer';
 
 import styles from '../styles/Home.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-import moment from 'moment';
 import useDate from '../hooks/useDate.js';
 import updateStatus from '../hooks/useUpdateStatus';
 
@@ -28,8 +28,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 export default function Home({ habits }: any) {
+	const { DateTime } = require("luxon");
 	const { time, wish } = useDate();
-	const router = useRouter()
+	const router = useRouter();
+
+	const weekStart = DateTime.now().startOf('week').toLocaleString();
+	const weekStartDay = DateTime.now().startOf('week').weekdayShort;
+	const weekEnd = DateTime.now().endOf('week').toLocaleString();
+	const weekEndDay = DateTime.now().endOf('week').weekdayShort;
 
   return (
     <div className={styles.container}>
@@ -47,9 +53,31 @@ export default function Home({ habits }: any) {
 						</h1>
 
 						<p className={styles.description}>
-							It's {' '} <span>{time}</span>
-							{' '} on <span>{moment().format('dddd')} {moment().format('ll')}</span>
+							It's {' '} <span>{time}</span> {' '}
+							It's {' '} <span>{DateTime.now().toLocaleString(DateTime.TIME_SIMPLE)}</span>
+							{' '} on <span>{DateTime.now().toLocaleString(DateTime.DATE_HUGE)}</span> 
 						</p>
+
+						<div className={styles.moverDiv}>
+							<div className={styles.movers}>
+								<div 
+									className={styles.moverIconLeft}
+									onClick={() => {}}
+								>
+									<FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>
+								</div>
+								<div 
+									className={styles.moverIconRight}
+									onClick={() => {}}
+								>
+									<FontAwesomeIcon icon={faChevronRight}></FontAwesomeIcon>
+								</div>
+							</div>
+							<div className={styles.dates}>
+								{`${weekStartDay}, ${weekStart.slice(0, weekStart.lastIndexOf('/'))}`} - {' '}
+								{`${weekEndDay}, ${weekEnd.slice(0, weekEnd.lastIndexOf('/'))}`}
+							</div>
+						</div>
 					</div>
 
 					<div className={styles.viewheader}>
@@ -68,7 +96,7 @@ export default function Home({ habits }: any) {
 
 				<div className={styles.dailyview}>
 					<DailyContainer 
-						today={moment().format('dddd')} 
+						today={DateTime.now().toLocaleString({ weekday: 'long' })}
 						habits={habits} 
 						router={router} 
 						updateStatus={updateStatus}

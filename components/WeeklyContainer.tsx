@@ -2,6 +2,7 @@ import WeeklyHabit from "./WeeklyHabit"
 import styles from "../styles/WeeklyContainer.module.css"
 import { Habit } from "../types";
 
+
 export default function WeeklyContainer(props) {
 
 	// parse habits into weekly view
