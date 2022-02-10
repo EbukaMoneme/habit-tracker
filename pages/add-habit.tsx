@@ -7,6 +7,8 @@ import styles from '../styles/AddHabit.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import addHabit from '../hooks/useAddHabit';
+import useDOY from '../hooks/useDOY';
+import { supabase } from '../utils/supabase';
 
 export default function AddHabit() {
 	const [state, setState] = useState({
@@ -58,7 +60,8 @@ export default function AddHabit() {
 		color: state.color,
 		description: state.description,
 		frequency: state.frequency,
-		status: state.status
+		// status: state.status
+		creationDate: useDOY(new Date())
 	}
 
 	// add habit to database
@@ -66,13 +69,22 @@ export default function AddHabit() {
 		event.preventDefault()
 		// If frequency is not empty, add habit to database
 		if (state.frequency.length > 0) {
-			try {
-				await addHabit(newHabit)
-			} catch (err) {
-				console.log(err)
-			} finally {
+
+			const { data, error } = await supabase
+			.from('habits')
+			.insert([newHabit])
+			if (error) {
+				console.log(error)
+			} else {
 				Router.push('/')
 			}
+			// try {
+			// 	await addHabit(newHabit)
+			// } catch (err) {
+			// 	console.log(err)
+			// } finally {
+			// 	Router.push('/')
+			// }
 		} else {
 			// otherwise show error
 			return changeState('error', !state.error)
