@@ -28,3 +28,21 @@ model Habit {
 	status			Json
 }
 
+model Year {
+	number Int  @id
+	weeks Week[]
+}
+
+model Week {
+	id Int @id @default(autoincrement())
+	year Year @relation(fields: [yearNum], references: [number])
+	yearNum Int
+	Monday			Json
+	Tuesday			Json
+	Wednesday			Json
+	Thursday			Json
+	Friday			Json
+	Satday			Json
+	Sunday			Json
+}
+
