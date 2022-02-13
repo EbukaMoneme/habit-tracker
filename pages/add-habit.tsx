@@ -11,20 +11,12 @@ import useDOY from '../hooks/useDOY';
 import { supabase } from '../utils/supabase';
 
 export default function AddHabit() {
+	const { DateTime } = require("luxon");
 	const [state, setState] = useState({
     title: "",
     color: "#000000",
     description: "",
     frequency: [],
-		status: {
-			'Monday': '', 
-			'Tuesday': '', 
-			'Wednesday': '', 
-			'Thursday': '', 
-			'Friday': '', 
-			'Saturday': '', 
-			'Sunday': ''
-		},
 		error: false
   })
 
@@ -41,18 +33,28 @@ export default function AddHabit() {
 	// change status and frequency on button click
 	const changeStatusAndFrequency = (val: string) => {
 		let newFrequency = [...state.frequency]
-		const week = {...state.status}
 		// If day clicked is in frequency, remove it, otherwise add it
 		// similarly update status
 		if (selected(val)) {
 			newFrequency = newFrequency.filter(day => day !== val)
-			week[val] = '';
 		} else {
 			newFrequency.push(val)
-			week[val] = false;
 		}
-		setState({...state, frequency: newFrequency, status: week, error: false })
+		setState({...state, frequency: newFrequency, error: false })
 	}
+
+	const completionTemplate = () => {
+		const week: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+		const template = week.map((day) => {
+			if (state.frequency.includes(day)) {
+				return 0
+			} else {
+				return -1
+			}
+		})
+		return template;
+	}
+
 
 	// new habit for submission
 	const newHabit = {
@@ -60,7 +62,9 @@ export default function AddHabit() {
 		color: state.color,
 		description: state.description,
 		frequency: state.frequency,
-		// status: state.status
+		template: completionTemplate(),
+		completion: completionTemplate(),
+		weekStart: useDOY(new Date(DateTime.now().startOf('week'))),
 		creationDate: useDOY(new Date())
 	}
 
@@ -78,13 +82,6 @@ export default function AddHabit() {
 			} else {
 				Router.push('/')
 			}
-			// try {
-			// 	await addHabit(newHabit)
-			// } catch (err) {
-			// 	console.log(err)
-			// } finally {
-			// 	Router.push('/')
-			// }
 		} else {
 			// otherwise show error
 			return changeState('error', !state.error)

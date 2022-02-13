@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import WeeklyContainer from '../components/WeeklyContainer';
 import DailyContainer from '../components/DailyContainer';
@@ -25,53 +25,87 @@ import useDOY from '../hooks/useDOY';
 import useValidDate from '../hooks/useValidDate';
 
 export const getServerSideProps: GetServerSideProps = async () => {
-	console.log("User:", supabase.auth.user())
-	// const habits: any = await prisma.habit.findMany();
-	// const sortedHabits: Habit[] = habits.sort((a: Habit, b: Habit) =>  a.id - b.id);
+	// console.log("User:", supabase.auth.user())
 
-	// return {
-	// 	props: { habits: sortedHabits }
-	// }
 	const { data: habits, error } = await supabase.from("habits").select('*')
 	if (error) {
 		console.log(error)
 	}
+	const { data: last_visited, error: err } = await supabase
+  .from('last_visited')
+  .select('*')
+	if (err) {
+		console.log(err)
+	}
+	console.log("Last Visited in server side:", last_visited[0].state)
+	
+
+	const sortedHabits: Habit[] = habits.sort((a: Habit, b: Habit) =>  a.id - b.id);
 	return {
-		props: { habits: habits }
+		props: { habits: sortedHabits, last_visited }
 	}
 }
 
-
-
-export default function Home({ habits }: any) {
+export default function Home({ habits, last_visited }: any) {
 	const { DateTime } = require("luxon");
 	const { time, wish } = useDate();
 	const router = useRouter();
 	
 	const today = DateTime.now();
-	const [state, setState] = useState({
+
+	const [state, setState] = useState(last_visited[0].state || {
 		year: today.year,
 		month: today.month,
 		day: today.day
 	})
 
+  const setLastVisited = async (day) => {
+		const { data, error } = await supabase
+  	.from('last_visited')
+  	.update({ state: day })
+  	.match({ id: 1 })
+  }
+
 	const weekStart = DateTime.local(state.year, state.month, state.day).startOf('week').toLocaleString();
 	const weekStartDay = DateTime.local(state.year, state.month, state.day).startOf('week').weekdayShort;
 	const weekEnd = DateTime.local(state.year, state.month, state.day).endOf('week').toLocaleString();
 	const weekEndDay = DateTime.local(state.year, state.month, state.day).endOf('week').weekdayShort;
-	console.log(state.year, state.month, state.day)
 
 	const monday = useDOY(new Date(weekStart))
 	const sunday = useDOY(new Date(weekEnd))
+
+	const updateWeeks = async (title, completion) => {
+		const { data, error } = await supabase
+		.from('habits')
+		.update({ completion: completion })
+		.match({ title: title })
+		if (error) {
+			console.log(error)
+		} else {
+			console.log("Success")
+			router.reload()
+		}
+	}
+
+	const checkLength = () => {
+		const extendedHabits = habits.map((habit) => {
+			if (habit.completion.length < sunday - habit.weekStart) {
+				const extendedCompletion = habit.completion.concat(habit.template)
+				updateWeeks(habit.title, extendedCompletion)
+			}
+		})
+	}
 
 	const changeWeek = (direction) => {
 		if (direction === 'forward') {
 			const { newYear, newMonth, newDay } = useValidDate(state.year, state.month, state.day + 7)
 			setState({...state, year: newYear, month: newMonth,  day: newDay})
+			setLastVisited({ year: newYear, month: newMonth,  day: newDay })
 		}
 		if (direction === 'backward') {
 			const { newYear, newMonth, newDay } = useValidDate(state.year, state.month, state.day - 7)
 			setState({...state, year: newYear, month: newMonth,  day: newDay})
+			setLastVisited({ year: newYear, month: newMonth,  day: newDay })
 		}
 	}
 
@@ -81,10 +115,17 @@ export default function Home({ habits }: any) {
 			month: today.month,
 			day: today.day
 		})
+		setLastVisited({
+			year: today.year,
+			month: today.month,
+			day: today.day
+		})
+		console.log(state)
 	}
 
+	const extendedHabits = checkLength()
+
 	const filteredHabits = habits.filter((habit) => habit.creationDate <= sunday)
-	
 
 	async function signOut() {
 		const { error } = await supabase.auth.signOut()
@@ -116,7 +157,7 @@ export default function Home({ habits }: any) {
 								className={styles.today}
 								onClick={setToday}
 							>
-								Today
+								This Week
 							</button>
 							<div className={styles.movers}>
 								<div 
@@ -150,9 +191,8 @@ export default function Home({ habits }: any) {
 					</div>
 					<hr/>
 
-					{/* {JSON.stringify(habits)} */}
-					{JSON.stringify(filteredHabits)}
-					{/* <WeeklyContainer habits={habits} router={router} updateStatus={updateStatus} /> */}
+					{/* {JSON.stringify(filteredHabits)} */}
+					<WeeklyContainer habits={filteredHabits} router={router} updateStatus={updateStatus} monday={monday} sunday={sunday}/>
 				</div>
 
 				<div className={styles.dailyview}>

@@ -8,32 +8,53 @@ export default function WeeklyHabit(props) {
 	// formats checkbox for each day of the week
 	const formatChecklist = (status: { [x: string]: string; }) => {
 		const week: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-		
-		const inputs = []
-		for (let day of week) {
-			if (status[day] !== '') {
-				inputs.push(<Checkbox
-					type="checkbox" 
-					id={props.id} 
-					name={day} 
-					value={day}
-					color={props.color}
-					default={status[day]}
-					disabled={false}
-					status={status}
-					router={props.router}
-					key={Math.random()}
-					updateStatus={props.updateStatus}
-				/>)
-			}
-			if (status[day] === '') {
-				inputs.push(<Checkbox
-					type="checkbox" 
-					id={props.id} 
-					name={day} 
-					disabled={true}
-					key={Math.random()}
-				/>)
+		const inputs = [];
+	
+		const start = props.monday - props.weekStart;
+		const end = start + 7;
+		for (let i = start; i < end; i++) {
+			if (props.completion[i] === 0) {
+				inputs.push(
+					<Checkbox
+						type="checkbox" 
+						id={props.id} 
+						dayOfYear={props.weekStart + i}
+						index={i}
+						completion={props.completion}
+						title={props.title}
+						color={props.color}
+						default={false}
+						disabled={false}
+						router={props.router}
+						key={Math.random()}
+					/>
+				)
+			} else if (props.completion[i] === 1) {
+				inputs.push(
+					<Checkbox
+						type="checkbox" 
+						id={props.id} 
+						dayOfYear={props.weekStart + i}
+						index={i}
+						completion={props.completion}
+						title={props.title}
+						color={props.color}
+						default={true}
+						disabled={false}
+						router={props.router}
+						key={Math.random()}
+					/>
+				)
+			} else {
+				inputs.push(
+					<Checkbox
+						type="checkbox" 
+						id={props.id}
+						dayOfYear={props.weekStart + i} 
+						index={i}
+						disabled={true}
+						key={Math.random()}
+					/>)
 			}
 		}
 		

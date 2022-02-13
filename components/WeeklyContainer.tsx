@@ -7,7 +7,7 @@ export default function WeeklyContainer(props) {
 
 	// parse habits into weekly view
 	const parsedHabits = props.habits && props.habits.map((habit: Habit, index: number) => {
-		return <WeeklyHabit {...habit} key={index} router={props.router} updateStatus={props.updateStatus} />
+		return <WeeklyHabit {...habit} key={index} router={props.router} updateStatus={props.updateStatus} monday={props.monday} sunday={props.sunday}/>
 	})
 	
 	// map labels for the weekly checklist
