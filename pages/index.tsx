@@ -25,32 +25,41 @@ import useDOY from '../hooks/useDOY';
 import useValidDate from '../hooks/useValidDate';
 
 export const getServerSideProps: GetServerSideProps = async () => {
-	// console.log("User:", supabase.auth.user())
+	console.log("User:", supabase.auth.user())
 
+	// Grab habits - will soon be user specific
 	const { data: habits, error } = await supabase.from("habits").select('*')
 	if (error) {
 		console.log(error)
 	}
+	// grab the last visited date/week - will also be attached to the user in table
+	// 		rather than it's own table
 	const { data: last_visited, error: err } = await supabase
   .from('last_visited')
   .select('*')
 	if (err) {
 		console.log(err)
 	}
-	console.log("Last Visited in server side:", last_visited[0].state)
-	
 
+	const { data: last_day, error: mistake } = await supabase
+  .from('last_day')
+  .select('*')
+	if (err) {
+		console.log(mistake)
+	}
+	// sort habits and return it with last_visited date
 	const sortedHabits: Habit[] = habits.sort((a: Habit, b: Habit) =>  a.id - b.id);
 	return {
-		props: { habits: sortedHabits, last_visited }
+		props: { habits: sortedHabits, last_visited, last_day }
 	}
 }
 
-export default function Home({ habits, last_visited }: any) {
+export default function Home({ habits, last_visited, last_day }: any) {
 	const { DateTime } = require("luxon");
 	const { time, wish } = useDate();
 	const router = useRouter();
-	
+
+	// Find today's date
 	const today = DateTime.now();
 
 	const [state, setState] = useState(last_visited[0].state || {
@@ -59,6 +68,7 @@ export default function Home({ habits, last_visited }: any) {
 		day: today.day
 	})
 
+	// Set last visited date
   const setLastVisited = async (day) => {
 		const { data, error } = await supabase
   	.from('last_visited')
@@ -66,14 +76,17 @@ export default function Home({ habits, last_visited }: any) {
   	.match({ id: 1 })
   }
 
+	// Finds start and end of week for dashboard
 	const weekStart = DateTime.local(state.year, state.month, state.day).startOf('week').toLocaleString();
 	const weekStartDay = DateTime.local(state.year, state.month, state.day).startOf('week').weekdayShort;
 	const weekEnd = DateTime.local(state.year, state.month, state.day).endOf('week').toLocaleString();
 	const weekEndDay = DateTime.local(state.year, state.month, state.day).endOf('week').weekdayShort;
-
+	// Finds the date of the year for start and end of week
 	const monday = useDOY(new Date(weekStart))
 	const sunday = useDOY(new Date(weekEnd))
 
+	// used with checkLength below to extend the weeks 
+	// 		if there isnt a completion array for that date
 	const updateWeeks = async (title, completion) => {
 		const { data, error } = await supabase
 		.from('habits')
@@ -89,13 +102,20 @@ export default function Home({ habits, last_visited }: any) {
 
 	const checkLength = () => {
 		const extendedHabits = habits.map((habit) => {
-			if (habit.completion.length < sunday - habit.weekStart) {
-				const extendedCompletion = habit.completion.concat(habit.template)
+			// Added the +7 on line below and second .concat below to never see reloading of dates
+			// 		Might need to change if changing frequency
+			if (habit.completion.length < sunday - habit.weekStart + 7) {
+				const extendedCompletion = habit.completion.concat(habit.template).concat(habit.template)
 				updateWeeks(habit.title, extendedCompletion)
 			}
 		})
 	}
 
+	// Called to continuosly update weeks
+	const extendedHabits = checkLength()
+
+	// Moves current week forward or back while using a date validator to avoid 
+	// 		non existent dates
 	const changeWeek = (direction) => {
 		if (direction === 'forward') {
 			const { newYear, newMonth, newDay } = useValidDate(state.year, state.month, state.day + 7)
@@ -109,6 +129,7 @@ export default function Home({ habits, last_visited }: any) {
 		}
 	}
 
+	// Sets the view to this week/today
 	const setToday = () => {
 		setState({
 			year: today.year,
@@ -120,10 +141,8 @@ export default function Home({ habits, last_visited }: any) {
 			month: today.month,
 			day: today.day
 		})
-		console.log(state)
+		// console.log(state)
 	}
-
-	const extendedHabits = checkLength()
 
 	const filteredHabits = habits.filter((habit) => habit.creationDate <= sunday)
 
@@ -153,7 +172,7 @@ export default function Home({ habits, last_visited }: any) {
 						</p>
 
 						<div className={styles.moverDiv}>
-						<button 
+							<button 
 								className={styles.today}
 								onClick={setToday}
 							>
@@ -196,12 +215,13 @@ export default function Home({ habits, last_visited }: any) {
 				</div>
 
 				<div className={styles.dailyview}>
-					{/* <DailyContainer 
-						today={DateTime.now().toLocaleString({ weekday: 'long' })}
+					<DailyContainer 
+						today={state}
 						habits={habits} 
 						router={router} 
 						updateStatus={updateStatus}
-					/> */}
+						last_day={last_day}
+					/>
 				</div>
       </main>
 			

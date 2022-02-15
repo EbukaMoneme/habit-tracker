@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { supabase } from "../utils/supabase";
 import styles from '../styles/DailyHabit.module.css'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,14 +11,18 @@ export default function DailyHabit(props) {
 	const toggleCompleted = async () => {
 		// Toggle completed status
 		setIsCompleted(!isCompleted)
+		let newCompletion = [...props.completion]
+		let habitCheck = props.completion[props.index]
+		habitCheck === 0? newCompletion[props.index] = 1: newCompletion[props.index] = 0;
 
-		try {
-			// Update database
-			await props.updateStatus(props.id, props.value, props.status)
-		} catch (err) {
-			console.log(err)
-		} finally {
-			// Reload page to re-fetch habit props
+		const { data, error } = await supabase
+		.from('habits')
+		.update({ completion: newCompletion })
+		.match({ title: props.title })
+		if (error) {
+			console.log(error)
+		} else {
+			console.log("Success")
 			props.router.reload()
 		}
 	}
