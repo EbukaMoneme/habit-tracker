@@ -51,6 +51,7 @@ export default function WeeklyHabit(props) {
 						type="checkbox" 
 						id={props.id}
 						dayOfYear={props.weekStart + i} 
+						completion={props.completion}
 						index={i}
 						disabled={true}
 						key={Math.random()}

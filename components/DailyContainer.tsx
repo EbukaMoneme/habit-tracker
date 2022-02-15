@@ -24,7 +24,7 @@ export default function DailyContainer(props) {
 	const thisDay = useDOY(new Date(dayDisplay))
 	// console.log(thisDay)
 	const currentHabits = props.habits.filter(habit => habit.weekStart <= thisDay)
-	// console.log(currentHabits)
+	// console.log("Current Habits:", currentHabits)
 
 	// Set last visited date
 	const setLastDay = async (day) => {
@@ -44,12 +44,14 @@ export default function DailyContainer(props) {
 			const index = thisDay - habit.weekStart;
 			if (habit.completion[index] === 0) {
 				parsedHabits.push(<DailyHabit 
-					{...habit} 
-					default={false} 
+					{...habit}
 					id={habit.id} 
+					dayOfYear={habit.weekStart + index}
 					index={index}
-					key={count}
+					completion={habit.completion}
+					default={false} 
 					router={props.router}
+					key={count}
 				/>)
 			} else if (habit.completion[index] === 1) {
 				parsedHabits.push(
@@ -58,11 +60,10 @@ export default function DailyContainer(props) {
 						id={habit.id} 
 						dayOfYear={habit.weekStart + index}
 						index={index}
-						completion={props.completion}
+						completion={habit.completion}
 						default={true}
-						disabled={false}
 						router={props.router}
-						key={Math.random()}
+						key={count}
 					/>
 				)
 			}

@@ -7,7 +7,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function DailyHabit(props) {
 	const [isCompleted, setIsCompleted] = useState<boolean>(props.default)
-
+	console.log("Daily completion", props.completion[props.index])
 	const toggleCompleted = async () => {
 		// Toggle completed status
 		setIsCompleted(!isCompleted)

@@ -3,6 +3,7 @@ import { supabase } from "../utils/supabase";
 
 function Checkbox(props) {
   const [isChecked, setIsChecked] = useState<boolean>(props.default);
+	console.log(props.completion[props.index])
 	const toggleChecked = async () => {
 		// Toggle completed status
 		setIsChecked(!isChecked)
