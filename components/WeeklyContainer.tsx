@@ -6,7 +6,7 @@ import { Habit } from "../types";
 export default function WeeklyContainer(props) {
 
 	// parse habits into weekly view
-	console.log("Weekly Habits", props.habits)
+	// console.log("Weekly Habits", props.habits)
 	const parsedHabits = props.habits && props.habits.map((habit: Habit, index: number) => {
 		return <WeeklyHabit {...habit} key={index} router={props.router} updateStatus={props.updateStatus} monday={props.monday} sunday={props.sunday}/>
 	})

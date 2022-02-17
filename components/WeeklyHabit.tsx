@@ -4,13 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
 export default function WeeklyHabit(props) {
+	const { DateTime, Interval } = require("luxon");
 
 	// formats checkbox for each day of the week
 	const formatChecklist = (status: { [x: string]: string; }) => {
 		const week: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 		const inputs = [];
 	
-		const start = props.monday - props.weekStart;
+		// const start = props.monday - props.weekStart;
+		const interval = new Interval({start: DateTime.fromISO(props.weekStart), end: props.monday})
+		const start = Math.abs(Math.floor(interval.length('days')))
 		const end = start + 7;
 		for (let i = start; i < end; i++) {
 			if (props.completion[i] === 0) {
@@ -18,7 +21,7 @@ export default function WeeklyHabit(props) {
 					<Checkbox
 						type="checkbox" 
 						id={props.id} 
-						dayOfYear={props.weekStart + i}
+						// dayOfYear={props.weekStart + i}
 						index={i}
 						completion={props.completion}
 						title={props.title}
@@ -34,7 +37,7 @@ export default function WeeklyHabit(props) {
 					<Checkbox
 						type="checkbox" 
 						id={props.id} 
-						dayOfYear={props.weekStart + i}
+						// dayOfYear={props.weekStart + i}
 						index={i}
 						completion={props.completion}
 						title={props.title}
@@ -50,7 +53,7 @@ export default function WeeklyHabit(props) {
 					<Checkbox
 						type="checkbox" 
 						id={props.id}
-						dayOfYear={props.weekStart + i} 
+						// dayOfYear={props.weekStart + i} 
 						completion={props.completion}
 						index={i}
 						disabled={true}

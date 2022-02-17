@@ -9,7 +9,7 @@ import useValidDate from "../hooks/useValidDate";
 import { supabase } from "../utils/supabase";
 
 export default function DailyContainer(props) {
-	const { DateTime } = require("luxon");
+	const { DateTime, Interval } = require("luxon");
 
 	// Find today's date
 	const today = DateTime.now();
@@ -21,9 +21,10 @@ export default function DailyContainer(props) {
 	})
 
 	const dayDisplay = DateTime.local(state.year, state.month, state.day).toLocaleString({ weekday: 'short', month: 'short', day: '2-digit' })
-	const thisDay = useDOY(new Date(dayDisplay))
+	const thisDay = DateTime.local(state.year, state.month, state.day)
 	// console.log(thisDay)
-	const currentHabits = props.habits.filter(habit => habit.weekStart <= thisDay)
+	
+	const currentHabits = props.habits.filter(habit => DateTime.fromISO(habit.weekStart) <= thisDay)
 	// console.log("Current Habits:", currentHabits)
 
 	// Set last visited date
@@ -34,6 +35,36 @@ export default function DailyContainer(props) {
 		.match({ id: 1 })
 	}
 
+	// used with checkLength below to extend the weeks 
+	// 		if there isnt a completion array for that date
+	const updateWeeks = async (title, completion) => {
+		const { data, error } = await supabase
+		.from('habits')
+		.update({ completion: completion })
+		.match({ title: title })
+		if (error) {
+			console.log(error)
+		} else {
+			console.log("Success")
+			props.router.reload()
+		}
+	}
+
+	//Add an extra week onto the habit completion when it's at the end of the array
+	const checkLength = () => {
+		const extendedHabits = props.habits.map((habit) => {
+			const extender = new Interval({start: DateTime.fromISO(habit.weekStart), end: thisDay.endOf('week')})
+			const extenderLength = Math.abs(Math.ceil(extender.length('days')))
+			if (habit.completion.length === extenderLength) {
+				const extendedCompletion = habit.completion.concat(habit.template).concat(habit.template)
+				updateWeeks(habit.title, extendedCompletion)
+			}
+		})
+	}
+
+	// Called to continuosly update weeks
+	const extendedHabits = checkLength()
+
 	// Format habits to daily view
 	const formatHabits = () => {
 		const parsedHabits = []
@@ -41,32 +72,39 @@ export default function DailyContainer(props) {
 	
 
 		for (let habit of currentHabits) {
-			const index = thisDay - habit.weekStart;
-			if (habit.completion[index] === 0) {
+
+			const interval = new Interval({start: DateTime.fromISO(habit.weekStart), end: thisDay})
+			const index = Math.abs(Math.floor(interval.length('days')))
+		
+			// console.log("HERE", index)
+			// console.log("Week start", habit.weekStart)
+			if (habit.completion[index] !== -1) {
+				// console.log(habit, index, habit.completion[index])
 				parsedHabits.push(<DailyHabit 
 					{...habit}
 					id={habit.id} 
-					dayOfYear={habit.weekStart + index}
+					// dayOfYear={habit.weekStart + index}
 					index={index}
 					completion={habit.completion}
-					default={false} 
+					default={habit.completion[index]} 
 					router={props.router}
 					key={count}
 				/>)
-			} else if (habit.completion[index] === 1) {
-				parsedHabits.push(
-					<DailyHabit
-						{...habit} 
-						id={habit.id} 
-						dayOfYear={habit.weekStart + index}
-						index={index}
-						completion={habit.completion}
-						default={true}
-						router={props.router}
-						key={count}
-					/>
-				)
-			}
+			} 
+			// else if (habit.completion[index] === 1) {
+			// 	parsedHabits.push(
+			// 		<DailyHabit
+			// 			{...habit} 
+			// 			id={habit.id} 
+			// 			// dayOfYear={habit.weekStart + index}
+			// 			index={index}
+			// 			completion={habit.completion}
+			// 			default={true}
+			// 			router={props.router}
+			// 			key={count}
+			// 		/>
+			// 	)
+			// }
 			count++;
 		}
 		return parsedHabits;
@@ -128,6 +166,7 @@ export default function DailyContainer(props) {
 				</div>
 			</div>
 			<div className={styles.dailyhabits}>
+				{/* {JSON.stringify(props.habits)} */}
 				{filteredHabits}
 			</div>
 		</div>

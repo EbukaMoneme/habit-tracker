@@ -1,16 +1,23 @@
 import { useState } from 'react'
 import { supabase } from "../utils/supabase";
 import styles from '../styles/DailyHabit.module.css'
+import { useEffect } from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function DailyHabit(props) {
 	const [isCompleted, setIsCompleted] = useState<boolean>(props.default)
-	console.log("Daily completion", props.completion[props.index])
+
+	useEffect(()=> {
+		setIsCompleted(props.default);
+	}, [props.default])
+
+	// console.log("Daily completion", props.completion[props.index])
 	const toggleCompleted = async () => {
 		// Toggle completed status
 		setIsCompleted(!isCompleted)
+		// isCompleted === 0? setIsCompleted(1): setIsCompleted(0);
 		let newCompletion = [...props.completion]
 		let habitCheck = props.completion[props.index]
 		habitCheck === 0? newCompletion[props.index] = 1: newCompletion[props.index] = 0;
@@ -39,6 +46,7 @@ export default function DailyHabit(props) {
 			}
 		>
 			<div className={styles.title}>{props.title}</div>
+			{/* {isCompleted} */}
 			{isCompleted?
 				<div className={styles.habitfooter}>
 					<div >

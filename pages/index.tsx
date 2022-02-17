@@ -55,7 +55,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 export default function Home({ habits, last_visited, last_day }: any) {
-	const { DateTime } = require("luxon");
+	const { DateTime, Interval } = require("luxon");
 	const { time, wish } = useDate();
 	const router = useRouter();
 
@@ -76,14 +76,14 @@ export default function Home({ habits, last_visited, last_day }: any) {
   	.match({ id: 1 })
   }
 
-	// Finds start and end of week for dashboard
+	// Finds start and end of week for weekly view
 	const weekStart = DateTime.local(state.year, state.month, state.day).startOf('week').toLocaleString();
 	const weekStartDay = DateTime.local(state.year, state.month, state.day).startOf('week').weekdayShort;
 	const weekEnd = DateTime.local(state.year, state.month, state.day).endOf('week').toLocaleString();
 	const weekEndDay = DateTime.local(state.year, state.month, state.day).endOf('week').weekdayShort;
 	// Finds the date of the year for start and end of week
-	const monday = useDOY(new Date(weekStart))
-	const sunday = useDOY(new Date(weekEnd))
+	const monday = DateTime.local(state.year, state.month, state.day).startOf('week')
+	const sunday = DateTime.local(state.year, state.month, state.day).endOf('week')
 
 	// used with checkLength below to extend the weeks 
 	// 		if there isnt a completion array for that date
@@ -100,11 +100,12 @@ export default function Home({ habits, last_visited, last_day }: any) {
 		}
 	}
 
+	//Add an extra week onto the habit completion when it's at the end of the array
 	const checkLength = () => {
 		const extendedHabits = habits.map((habit) => {
-			// Added the +7 on line below and second .concat below to never see reloading of dates
-			// 		Might need to change if changing frequency
-			if (habit.completion.length < sunday - habit.weekStart + 7) {
+			const extender = new Interval({start: DateTime.fromISO(habit.weekStart), end: sunday})
+			const extenderLength = Math.abs(Math.ceil(extender.length('days')))
+			if (habit.completion.length === extenderLength) {
 				const extendedCompletion = habit.completion.concat(habit.template).concat(habit.template)
 				updateWeeks(habit.title, extendedCompletion)
 			}
@@ -141,10 +142,9 @@ export default function Home({ habits, last_visited, last_day }: any) {
 			month: today.month,
 			day: today.day
 		})
-		// console.log(state)
 	}
 
-	const filteredHabits = habits.filter((habit) => habit.creationDate <= sunday)
+	const filteredHabits = habits.filter((habit) => DateTime.fromISO(habit.creationDate) <= sunday)
 
 	async function signOut() {
 		const { error } = await supabase.auth.signOut()

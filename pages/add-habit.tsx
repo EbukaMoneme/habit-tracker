@@ -64,8 +64,8 @@ export default function AddHabit() {
 		frequency: state.frequency,
 		template: completionTemplate(),
 		completion: completionTemplate(),
-		weekStart: useDOY(new Date(DateTime.now().startOf('week'))),
-		creationDate: useDOY(new Date())
+		weekStart: DateTime.now().startOf('week'),
+		creationDate: DateTime.now()
 	}
 
 	// add habit to database
