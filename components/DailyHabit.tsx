@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import Options from './Buttons/Options';
 
 export default function DailyHabit(props) {
 	const [isCompleted, setIsCompleted] = useState<boolean>(props.default)
@@ -34,6 +35,19 @@ export default function DailyHabit(props) {
 		}
 	}
 
+	const deleteHabit = async () => {
+		const { data, error } = await supabase
+  	.from('habits')
+  	.delete()
+  	.match({ id: props.id })
+		if (error) {
+			console.log(error)
+		} else {
+			console.log("Success")
+			props.router.reload()
+		}
+	}
+
 	return (
 		<div 
 			className={styles.habit} 
@@ -45,7 +59,8 @@ export default function DailyHabit(props) {
 				{backgroundColor: 'white', color: 'black', borderLeft: `6px solid ${props.color}`, borderRadius: '0px 7px 7px 0px'}
 			}
 		>
-			<div className={styles.title}>{props.title}</div>
+			<div className={styles.title}>{props.title} <Options props={props} deleteHabit={deleteHabit}/></div>
+			
 			{/* {isCompleted} */}
 			{isCompleted?
 				<div className={styles.habitfooter}>

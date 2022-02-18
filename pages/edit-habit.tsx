@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useState } from 'react'
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import styles from '../styles/AddHabit.module.css'
@@ -10,15 +10,20 @@ import addHabit from '../hooks/useAddHabit';
 import useDOY from '../hooks/useDOY';
 import { supabase } from '../utils/supabase';
 
-export default function AddHabit(props) {
+export default function EditHabit(props) {
+	const router = useRouter();
 	const { DateTime } = require("luxon");
+	const { query } = router
 	const [state, setState] = useState({
-    title: "",
-    color: "#000000",
-    description: "",
-    frequency: [],
+    title: (query.title || ""),
+    color: (query.color || "#000000"),
+    description: (query.description || ""),
+    frequency: (query.frequency || []),
 		error: false
   })
+	console.log(query)
+	console.log(props)
+	console.log(props.query)
 
 	// Change state for all keys except status and frequency
 	const changeState = (key: string, val: string | boolean) => {
@@ -61,13 +66,7 @@ export default function AddHabit(props) {
 		title: state.title,
 		color: state.color,
 		description: state.description,
-		// frequency: state.frequency,
-		freq_hist: [
-			{start: DateTime.now(),
-				end: null,
-				frequency: state.frequency
-			}
-		],
+		frequency: state.frequency,
 		template: completionTemplate(),
 		completion: completionTemplate(),
 		weekStart: DateTime.now().startOf('week'),
@@ -82,10 +81,12 @@ export default function AddHabit(props) {
 
 			const { data, error } = await supabase
 			.from('habits')
-			.insert([newHabit])
+			.update({ color: state.color,  template: completionTemplate()})
+			.match({ id: query.id })
 			if (error) {
 				console.log(error)
 			} else {
+				console.log("Success")
 				Router.push('/')
 			}
 		} else {
@@ -114,7 +115,7 @@ export default function AddHabit(props) {
 					</Link>
 
 					<h1 className={styles.title}>
-						New <span>Habit</span>
+						Edit <span>Habit</span>
 					</h1>
 
 					<div className={styles.firstInput}>
@@ -125,8 +126,9 @@ export default function AddHabit(props) {
 								type="text" 
 								id="title" 
 								name="title" 
-								value={state.title}
-								onChange={(event) => changeState("title", event.target.value)}
+								value={query.title}
+								readOnly
+								// onChange={(event) => changeState("title", event.target.value)}
 								required
 							/>
 						</div>
@@ -150,8 +152,9 @@ export default function AddHabit(props) {
 							className={styles.textArea}
 							id="description" 
 							name="description" 
-							value={state.description}
-							onChange={(event) => changeState("description", event.target.value)}
+							value={query.description}
+							readOnly
+							// onChange={(event) => changeState("description", event.target.value)}
 						/>
 					</div>
 
@@ -266,7 +269,7 @@ export default function AddHabit(props) {
 							Please select when you want to do this habit!
 						</div>
 					</div>
-				  <button className={styles.submit} type="submit">Create Habit</button>
+				  <button className={styles.submit} type="submit">Edit Habit</button>
 				</form>
 			</main>
 

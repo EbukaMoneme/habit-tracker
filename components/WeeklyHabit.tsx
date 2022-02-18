@@ -2,6 +2,8 @@ import styles from '../styles/WeeklyHabit.module.css'
 import Checkbox from './Checkbox';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import HabitTitle from './Buttons/HabitTitle';
+import { supabase } from '../utils/supabase';
 
 export default function WeeklyHabit(props) {
 	const { DateTime, Interval } = require("luxon");
@@ -67,11 +69,25 @@ export default function WeeklyHabit(props) {
 		)
 	}
 
+	const deleteHabit = async () => {
+		const { data, error } = await supabase
+  	.from('habits')
+  	.delete()
+  	.match({ id: props.id })
+		if (error) {
+			console.log(error)
+		} else {
+			console.log("Success")
+			props.router.reload()
+		}
+	}
+
 	return (
 		<div className={styles.habit}>
 			<div className={styles.title}>
-			  <FontAwesomeIcon className={styles.icon} style={{color: props.color}} icon={faCircle}></FontAwesomeIcon> 
-				<div className={styles.habitName}>{props.title}</div>
+			  {/* <FontAwesomeIcon className={styles.icon} style={{color: props.color}} icon={faCircle}></FontAwesomeIcon> 
+				<div className={styles.habitName}>{props.title}</div> */}
+				<HabitTitle props={props} title={props.title} color={props.color} deleteHabit={deleteHabit} />
 			</div>
 			<form className={styles.checklist}>
 				{formatChecklist(props.status)}
