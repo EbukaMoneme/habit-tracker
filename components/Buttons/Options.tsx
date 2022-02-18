@@ -24,7 +24,7 @@ export default function Options(props) {
 		if (menuRef.current && menuRef.current.contains(evt.target)) return;
 			setisActive(false);
 	};
-
+	// console.log(props.props.freq_hist)
 	const editHabit = () => {
 		props.props.router.push({
 			pathname: '/edit-habit', 
@@ -32,13 +32,13 @@ export default function Options(props) {
 				title: props.props.title,
 				color: props.props.color,
 				description: props.props.description,
-				frequency: props.props.freq_hist[0].frequency,
+				frequency: props.props.freq_hist[props.props.freq_hist.length-1].frequency,
 				id: props.props.id
 			}
 		})
 	}
 
-	console.log(props)
+	// console.log(props)
 	useEffect(() => {
 		document.addEventListener(`click`, clickChecker);
 		return () => document.removeEventListener('click', clickChecker)

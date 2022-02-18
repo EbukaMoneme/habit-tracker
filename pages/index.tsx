@@ -103,6 +103,7 @@ export default function Home({ habits, last_visited, last_day }: any) {
 	//Add an extra week onto the habit completion when it's at the end of the array
 	const checkLength = () => {
 		const extendedHabits = habits.map((habit) => {
+			// console.log(habit)
 			const extender = new Interval({start: DateTime.fromISO(habit.weekStart), end: sunday})
 			const extenderLength = Math.abs(Math.ceil(extender.length('days')))
 			if (habit.completion.length === extenderLength) {

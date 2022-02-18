@@ -91,20 +91,6 @@ export default function DailyContainer(props) {
 					key={count}
 				/>)
 			} 
-			// else if (habit.completion[index] === 1) {
-			// 	parsedHabits.push(
-			// 		<DailyHabit
-			// 			{...habit} 
-			// 			id={habit.id} 
-			// 			// dayOfYear={habit.weekStart + index}
-			// 			index={index}
-			// 			completion={habit.completion}
-			// 			default={true}
-			// 			router={props.router}
-			// 			key={count}
-			// 		/>
-			// 	)
-			// }
 			count++;
 		}
 		return parsedHabits;

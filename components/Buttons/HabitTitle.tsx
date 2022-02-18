@@ -22,7 +22,7 @@ export default function HabitTitle(props) {
 				title: props.props.title,
 				color: props.props.color,
 				description: props.props.description,
-				frequency: props.props.freq_hist[0].frequency,
+				frequency: props.props.freq_hist[props.props.freq_hist.length-1].frequency,
 				id: props.props.id
 			}
 		})

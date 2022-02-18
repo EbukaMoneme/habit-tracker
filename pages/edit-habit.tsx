@@ -9,10 +9,22 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import addHabit from '../hooks/useAddHabit';
 import useDOY from '../hooks/useDOY';
 import { supabase } from '../utils/supabase';
+import { GetServerSideProps } from 'next';
 
-export default function EditHabit(props) {
+export const getServerSideProps: GetServerSideProps = async () => {
+	// Grab habits
+	const { data: habits, error } = await supabase.from("habits").select('*')
+	if (error) {
+		console.log(error)
+	}
+	
+	return {
+		props: { habits: habits }
+	}
+}
+export default function EditHabit({ habits }) {
 	const router = useRouter();
-	const { DateTime } = require("luxon");
+	const { DateTime, Interval } = require("luxon");
 	const { query } = router
 	const [state, setState] = useState({
     title: (query.title || ""),
@@ -21,9 +33,11 @@ export default function EditHabit(props) {
     frequency: (query.frequency || []),
 		error: false
   })
-	console.log(query)
-	console.log(props)
-	console.log(props.query)
+	const targetHabit = habits.filter(habit => habit.id == query.id)
+	const freq_hist = targetHabit[0].freq_hist
+	const completion = targetHabit[0].completion
+	console.log(targetHabit)
+	console.log(completion)
 
 	// Change state for all keys except status and frequency
 	const changeState = (key: string, val: string | boolean) => {
@@ -59,7 +73,10 @@ export default function EditHabit(props) {
 		})
 		return template;
 	}
-
+	const freqChange = () => {
+		return query.frequency !== state.frequency
+	}
+	console.log(freqChange())
 
 	// new habit for submission
 	const newHabit = {
@@ -72,22 +89,53 @@ export default function EditHabit(props) {
 		weekStart: DateTime.now().startOf('week'),
 		creationDate: DateTime.now()
 	}
+	
 
 	// add habit to database
 	const handleSubmit = async (event: { preventDefault: () => void; }) => {
 		event.preventDefault()
 		// If frequency is not empty, add habit to database
 		if (state.frequency.length > 0) {
+			if (freqChange()) {
+				// make changes in freq_hist
+				freq_hist[freq_hist.length-1].end = DateTime.now()
+				const newFreq = {
+					start: DateTime.now(),
+					end: null,
+					frequency: state.frequency
+				}
+				freq_hist.push(newFreq)
 
-			const { data, error } = await supabase
-			.from('habits')
-			.update({ color: state.color,  template: completionTemplate()})
-			.match({ id: query.id })
-			if (error) {
-				console.log(error)
+				// make new completion
+				const habitInterval = new Interval({start: DateTime.fromISO(targetHabit[0].weekStart), end: DateTime.local(DateTime.now().year, DateTime.now().month, DateTime.now().day).endOf('week')})
+				const habitLength = Math.abs(Math.ceil(habitInterval.length('days')))
+				const todayIndex = DateTime.now().weekday
+				console.log(habitInterval)
+				console.log(habitLength)
+				let newCompletion = completion.slice(0, habitLength)
+				newCompletion = newCompletion.concat(completionTemplate())
+				
+				const { data, error } = await supabase
+				.from('habits')
+				.update({ color: state.color, template: completionTemplate(), completion: newCompletion, freq_hist: freq_hist})
+				.match({ id: query.id })
+				if (error) {
+					console.log(error)
+				} else {
+					console.log("Success")
+					Router.push('/')
+				}
 			} else {
-				console.log("Success")
-				Router.push('/')
+				const { data, error } = await supabase
+				.from('habits')
+				.update({ color: state.color})
+				.match({ id: query.id })
+				if (error) {
+					console.log(error)
+				} else {
+					console.log("Success")
+					Router.push('/')
+				}
 			}
 		} else {
 			// otherwise show error
