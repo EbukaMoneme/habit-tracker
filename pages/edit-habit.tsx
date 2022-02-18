@@ -150,6 +150,55 @@ export default function EditHabit({ habits }) {
 		}
 	}
 
+	const everySelected = () => {
+		const everyday = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+		if (state.frequency.length != everyday.length) {
+			return false;
+		}
+
+		for (let i = 0; i < everyday.length; i++) {
+			if (state.frequency[i] !== everyday[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+	const weekDaySelected = () => {
+		const weekday = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+		if (state.frequency.length != weekday.length) {
+			return false;
+		}
+
+		for (let i = 0; i < weekday.length; i++) {
+			if (state.frequency[i] !== weekday[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	console.log(everySelected())
+	console.log(weekDaySelected())
+
+	const setWeekdays = () => {
+		const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+		if (weekDaySelected()) {
+			setState({...state, frequency: [], error: false })
+		} else {
+			setState({...state, frequency: weekdays, error: false })
+		}
+	}
+	const setEveryday = () => {
+		const everyday = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+		if (everySelected()) {
+			setState({...state, frequency: [], error: false })
+		} else {
+			setState({...state, frequency: everyday, error: false })
+		}
+	}
+
+	
+
 	return (
 		<div className={styles.container}>
       <Head>
@@ -216,105 +265,141 @@ export default function EditHabit({ habits }) {
 					<div className={styles.inputDiv}>
 						<label htmlFor="frequency">Habit Frequency</label>
 
-						<div className={styles.frequencyButtons}>
-							<button 
-								className={
-									`${styles.frequencyOption}
-									${selected("Monday")?
-									styles.selected:
-									styles.unselected}`
-								}
-								name="frequency" 
-								value="Monday"
-								onClick={(event) => {
-									event.preventDefault()
-									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
-								}}
-							> Mon </button>
-							<button 
-								className={
-									`${styles.frequencyOption}
-									${selected("Tuesday")?
-									styles.selected:
-									styles.unselected}`
-								}
-								name="frequency" 
-								value="Tuesday"
-								onClick={(event) => {
-									event.preventDefault()
-									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
-								}}
-							> Tue </button>
-							<button 
-								className={
-									`${styles.frequencyOption}
-									${selected("Wednesday")?
-									styles.selected:
-									styles.unselected}`
-								}
-								name="frequency" 
-								value="Wednesday"
-								onClick={(event) => {
-									event.preventDefault()
-									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
-								}}
-							> Wed </button>
-							<button 
-								className={
-									`${styles.frequencyOption}
-									${selected("Thursday")?
-									styles.selected:
-									styles.unselected}`
-								}
-								name="frequency" 
-								value="Thursday"
-								onClick={(event) => {
-									event.preventDefault()
-									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
-								}}
-							> Thu </button>
-							<button 
-								className={
-									`${styles.frequencyOption}
-									${selected("Friday")?
-									styles.selected:
-									styles.unselected}`
-								}
-								name="frequency" 
-								value="Friday"
-								onClick={(event) => {
-									event.preventDefault()
-									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
-								}}
-							> Fri </button>
-							<button 
-								className={
-									`${styles.frequencyOption}
-									${selected("Saturday")?
-									styles.selected:
-									styles.unselected}`
-								} 
-								name="frequency" 
-								value="Saturday"
-								onClick={(event) => {
-									event.preventDefault()
-									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
-								}}
-							> Sat </button>
-							<button 
-								className={
-									`${styles.frequencyOption}
-									${selected("Sunday")?
-									styles.selected:
-									styles.unselected}`
-								}
-								name="frequency" 
-								value="Sunday"
-								onClick={(event) => {
-									event.preventDefault()
-									changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
-								}}
-							> Sun </button>
+						<div className={styles.frequencyContainer}>
+
+							<div className={styles.frequencyButtons}>
+								<button 
+									className={
+										`${styles.frequencyOption}
+										${selected("Monday")?
+										styles.selected:
+										styles.unselected}`
+									}
+									name="frequency" 
+									value="Monday"
+									onClick={(event) => {
+										event.preventDefault()
+										changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
+									}}
+								> Mon </button>
+								<button 
+									className={
+										`${styles.frequencyOption}
+										${selected("Tuesday")?
+										styles.selected:
+										styles.unselected}`
+									}
+									name="frequency" 
+									value="Tuesday"
+									onClick={(event) => {
+										event.preventDefault()
+										changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
+									}}
+								> Tue </button>
+								<button 
+									className={
+										`${styles.frequencyOption}
+										${selected("Wednesday")?
+										styles.selected:
+										styles.unselected}`
+									}
+									name="frequency" 
+									value="Wednesday"
+									onClick={(event) => {
+										event.preventDefault()
+										changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
+									}}
+								> Wed </button>
+								<button 
+									className={
+										`${styles.frequencyOption}
+										${selected("Thursday")?
+										styles.selected:
+										styles.unselected}`
+									}
+									name="frequency" 
+									value="Thursday"
+									onClick={(event) => {
+										event.preventDefault()
+										changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
+									}}
+								> Thu </button>
+								<button 
+									className={
+										`${styles.frequencyOption}
+										${selected("Friday")?
+										styles.selected:
+										styles.unselected}`
+									}
+									name="frequency" 
+									value="Friday"
+									onClick={(event) => {
+										event.preventDefault()
+										changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
+									}}
+								> Fri </button>
+								<button 
+									className={
+										`${styles.frequencyOption}
+										${selected("Saturday")?
+										styles.selected:
+										styles.unselected}`
+									} 
+									name="frequency" 
+									value="Saturday"
+									onClick={(event) => {
+										event.preventDefault()
+										changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
+									}}
+								> Sat </button>
+								<button 
+									className={
+										`${styles.frequencyOption}
+										${selected("Sunday")?
+										styles.selected:
+										styles.unselected}`
+									}
+									name="frequency" 
+									value="Sunday"
+									onClick={(event) => {
+										event.preventDefault()
+										changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
+									}}
+								> Sun </button>
+							</div>
+							<div className={styles.frequencyControl}>
+								<button 
+									className={
+										`${styles.frequencyControlOption}
+										${weekDaySelected()?
+										styles.selected:
+										styles.unselected}`
+									}
+									name="frequency" 
+									value="Weekdays"
+									onClick={(event) => {
+										event.preventDefault()
+										setWeekdays()
+										// changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
+									}}
+								> Weekdays </button>
+								<button 
+									className={
+										`${styles.frequencyControlOption}
+										${everySelected()?
+										styles.selected:
+										styles.unselected}`
+									}
+									// name="frequency" 
+									value="Every day"
+									onClick={(event) => {
+										event.preventDefault()
+										setEveryday()
+										// changeStatusAndFrequency((event.target as HTMLTextAreaElement).value)
+									}}
+								> Every day</button>
+
+							</div>
 						</div>
 						<div className={
 							state.error?

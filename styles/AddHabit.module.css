@@ -88,14 +88,32 @@
 	border: 1px solid #dadada;
 	border-radius: 7px;
 	padding: 0.5em;
+	width: 65%;
 }
-
+.frequencyControl {
+	display: flex;
+	justify-content: space-between;
+	border: 1px solid #dadada;
+	border-radius: 7px;
+	padding: 0.5em;
+	width: 32%;
+}
+.frequencyContainer {
+	display: flex;
+	justify-content: space-between;
+}
 .frequencyOption {
-	padding: 1em 1.5em;
+	padding: 0.7em 0em;
+	width: 13%;
 	border-radius: 7px;
 	font-weight: bold;
 	transition: all 150ms;
-	
+}
+.frequencyControlOption {
+	width: 48%;
+	border-radius: 7px;
+	font-weight: bold;
+	transition: all 150ms;
 }
 
 .selected {
@@ -112,7 +130,7 @@
 	display: flex;
 	color: rgb(96, 96, 96);
 	align-items: center;
-	margin-top: 1em;
+	margin-top: 2em;
 }
 
 .back {
