@@ -22,6 +22,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 		props: { habits: habits }
 	}
 }
+
 export default function EditHabit({ habits }) {
 	const router = useRouter();
 	const { DateTime, Interval } = require("luxon");
@@ -36,8 +37,8 @@ export default function EditHabit({ habits }) {
 	const targetHabit = habits.filter(habit => habit.id == query.id)
 	const freq_hist = targetHabit[0].freq_hist
 	const completion = targetHabit[0].completion
-	console.log(targetHabit)
-	console.log(completion)
+	// console.log(targetHabit)
+	// console.log(completion)
 
 	// Change state for all keys except status and frequency
 	const changeState = (key: string, val: string | boolean) => {
@@ -76,19 +77,19 @@ export default function EditHabit({ habits }) {
 	const freqChange = () => {
 		return query.frequency !== state.frequency
 	}
-	console.log(freqChange())
+	// console.log(freqChange())
 
 	// new habit for submission
-	const newHabit = {
-		title: state.title,
-		color: state.color,
-		description: state.description,
-		frequency: state.frequency,
-		template: completionTemplate(),
-		completion: completionTemplate(),
-		weekStart: DateTime.now().startOf('week'),
-		creationDate: DateTime.now()
-	}
+	// const newHabit = {
+	// 	title: state.title,
+	// 	color: state.color,
+	// 	description: state.description,
+	// 	frequency: state.frequency,
+	// 	template: completionTemplate(),
+	// 	completion: completionTemplate(),
+	// 	weekStart: DateTime.now().startOf('week'),
+	// 	creationDate: DateTime.now()
+	// }
 	
 
 	// add habit to database
@@ -107,13 +108,19 @@ export default function EditHabit({ habits }) {
 				freq_hist.push(newFreq)
 
 				// make new completion
-				const habitInterval = new Interval({start: DateTime.fromISO(targetHabit[0].weekStart), end: DateTime.local(DateTime.now().year, DateTime.now().month, DateTime.now().day).endOf('week')})
+				const habitInterval = new Interval({start: DateTime.fromISO(targetHabit[0].weekStart), end: DateTime.local(DateTime.now().year, DateTime.now().month, DateTime.now().day).startOf('week')})
 				const habitLength = Math.abs(Math.ceil(habitInterval.length('days')))
 				const todayIndex = DateTime.now().weekday
 				console.log(habitInterval)
 				console.log(habitLength)
 				let newCompletion = completion.slice(0, habitLength)
-				newCompletion = newCompletion.concat(completionTemplate())
+				let thisWeek = completion.slice(habitLength, habitLength+7)
+				thisWeek = thisWeek.slice(0, todayIndex)
+				let newWeek = completionTemplate().slice(todayIndex)
+				thisWeek = thisWeek.concat(newWeek)
+				// console.log(thisWeek)
+				newCompletion = newCompletion.concat(thisWeek).concat(completionTemplate())
+				// console.log(newCompletion)
 				
 				const { data, error } = await supabase
 				.from('habits')
